@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fuckin Awesome — Discover What's Worth Giving a Fuck About</title>
+  <meta name="description" content="Discover, vote on, and share the coolest shit on the internet.">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Inter, Arial, sans-serif; background: #0b0b0d; color: #fff; }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: 1180px; margin: auto; padding: 0 22px; }
+    header { padding: 22px 0; border-bottom: 1px solid #242428; }
+    nav { display:flex; align-items:center; justify-content:space-between; gap:20px; }
+    .logo { font-size: 25px; font-weight: 900; letter-spacing:-1px; }
+    .logo span { color:#ff3b30; }
+    .navbtn { border:1px solid #35353b; padding:10px 16px; border-radius:999px; font-weight:700; background:#151519; }
+    .hero { text-align:center; padding:86px 0 55px; }
+    .eyebrow { color:#ff453a; font-weight:900; letter-spacing:2px; text-transform:uppercase; font-size:13px; }
+    h1 { font-size:clamp(48px, 9vw, 94px); line-height:.9; letter-spacing:-5px; margin:18px auto 25px; max-width:900px; }
+    .hero p { color:#a7a7af; font-size:20px; max-width:650px; margin:0 auto 32px; line-height:1.5; }
+    .actions { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; }
+    button { border:0; cursor:pointer; font:inherit; }
+    .primary { background:#ff3b30; color:#fff; padding:16px 24px; border-radius:12px; font-weight:900; }
+    .secondary { background:#fff; color:#111; padding:16px 24px; border-radius:12px; font-weight:900; }
+    .sectionhead { display:flex; justify-content:space-between; align-items:end; margin:25px 0 16px; }
+    .sectionhead h2 { margin:0; font-size:28px; }
+    .muted { color:#888892; }
+    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; padding-bottom:70px; }
+    .card { background:#151519; border:1px solid #27272d; border-radius:18px; overflow:hidden; transition:.2s; }
+    .card:hover { transform:translateY(-3px); border-color:#45454d; }
+    .pic { height:210px; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#27272d,#111114); font-size:72px; }
+    .content { padding:18px; }
+    .tag { color:#ff6b63; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:1px; }
+    .content h3 { margin:8px 0 9px; font-size:20px; }
+    .content p { color:#9999a2; line-height:1.45; margin:0 0 16px; }
+    .vote { display:flex; align-items:center; justify-content:space-between; }
+    .awesome { background:#222228; color:#fff; border-radius:10px; padding:10px 12px; font-weight:800; }
+    .score { color:#ff453a; font-weight:900; }
+    footer { border-top:1px solid #242428; padding:30px 0 50px; color:#777780; text-align:center; }
+    @media(max-width:800px){ .grid{grid-template-columns:1fr;} h1{letter-spacing:-3px;} }
+  </style>
+</head>
+<body>
+<header><div class="wrap"><nav>
+  <div class="logo">FUCKIN<span>AWESOME</span></div>
+  <a class="navbtn" href="#submit">Submit Something</a>
+</nav></div></header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">The internet's hall of awesome</div>
+    <h1>Find something<br>FUCKIN AWESOME.</h1>
+    <p>Discover incredible things, vote on the coolest shit on the internet, and show everyone what you found.</p>
+    <div class="actions">
+      <button class="primary" onclick="randomAwesome()">🔥 Show Me Something Fuckin Awesome</button>
+      <button class="secondary" onclick="document.getElementById('submit').scrollIntoView({behavior:'smooth'})">Submit Something</button>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="sectionhead">
+    <div><h2>🔥 Trending Now</h2><div class="muted">The stuff people can't stop talking about.</div></div>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section id="submit" class="wrap" style="padding:30px 0 90px; text-align:center;">
+  <div style="background:#151519;border:1px solid #27272d;border-radius:20px;padding:45px 20px;">
+    <div class="eyebrow">Got something?</div>
+    <h2 style="font-size:38px;margin:10px 0;">Show us something fuckin awesome.</h2>
+    <p class="muted">The full submission system is coming next.</p>
+    <button class="primary" onclick="alert('Submission system coming in the next build.')">Submit a Discovery</button>
+  </div>
+</section>
+</main>
+
+<footer>© 2026 Fuckin Awesome. Built for people who know awesome when they see it.</footer>
+
+<script>
+const items = [
+  {emoji:"🏠", tag:"Architecture", title:"A house that looks like it belongs on another planet", text:"Ridiculously cool design that makes a normal house look boring.", score:97},
+  {emoji:"🚀", tag:"Technology", title:"A pocket-sized device doing something ridiculous", text:"Someone built it. Nobody asked them to. We're glad they did.", score:95},
+  {emoji:"🏔️", tag:"Adventure", title:"The kind of place that makes you book a flight", text:"One of those views that stops your scroll immediately.", score:99},
+  {emoji:"🍔", tag:"Food", title:"A burger that has no business being this good", text:"The internet has spoken. This thing looks outrageous.", score:94},
+  {emoji:"🚗", tag:"Machines", title:"A car designed by someone who hates boring cars", text:"Fast, weird, beautiful. Exactly what we're here for.", score:96},
+  {emoji:"🎨", tag:"Art", title:"This should not be possible with paint", text:"The kind of artwork you stare at for five minutes.", score:98}
+];
+
+function render(){
+  document.getElementById("grid").innerHTML = items.map((x,i)=>`
+    <article class="card">
+      <div class="pic">${x.emoji}</div>
+      <div class="content">
+        <div class="tag">${x.tag}</div>
+        <h3>${x.title}</h3>
+        <p>${x.text}</p>
+        <div class="vote">
+          <button class="awesome" onclick="vote(this)">🔥 FUCKIN AWESOME</button>
+          <div class="score">${x.score}%</div>
+        </div>
+      </div>
+    </article>`).join("");
+}
+function vote(btn){
+  btn.textContent="🔥 YOU AGREE";
+  btn.style.background="#ff3b30";
+}
+function randomAwesome(){
+  const cards=[...document.querySelectorAll(".card")];
+  cards[Math.floor(Math.random()*cards.length)].scrollIntoView({behavior:"smooth",block:"center"});
+}
+render();
+</script>
+</body>
+</html>
