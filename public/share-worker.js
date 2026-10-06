@@ -1,0 +1,10 @@
+self.addEventListener('install',e=>e.waitUntil(self.skipWaiting()));
+self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));
+self.addEventListener('fetch',e=>{const url=new URL(e.request.url);if(url.origin!==self.location.origin||url.pathname!=='/share-target'||e.request.method!=='POST')return;
+ e.respondWith((async()=>{try{const form=await e.request.formData(),files=form.getAll('photos').filter(x=>typeof x!=='string'&&x.size);const photo=files[0]||null;
+ if(photo&&(photo.size>20*1024*1024||!['image/jpeg','image/png','image/webp','image/heic','image/heif'].includes(photo.type)))return Response.redirect(self.location.origin+'/?share_error=photo',303);
+ const draft={title:String(form.get('title')||'').slice(0,140),text:String(form.get('text')||'').slice(0,2048),url:String(form.get('url')||'').slice(0,2048),photo,created:Date.now()};
+ await new Promise((resolve,reject)=>{const r=indexedDB.open('fa-sharing',1);r.onupgradeneeded=()=>r.result.createObjectStore('drafts');r.onerror=()=>reject(r.error);r.onsuccess=()=>{const db=r.result,t=db.transaction('drafts','readwrite');t.objectStore('drafts').put(draft,'latest');t.oncomplete=()=>{db.close();resolve()};t.onerror=()=>{db.close();reject(t.error)}}});
+ return Response.redirect(self.location.origin+'/?share=1',303);
+ }catch{return Response.redirect(self.location.origin+'/?share_error=draft',303)}})());
+});
