@@ -13,7 +13,7 @@ export async function GET(request,{params}){
  const {data,error}=await client.from('submissions').select('url').eq('id',id).eq('status','approved').maybeSingle();
  if(error||!data?.url)return new Response(null,{status:404,headers});
  const preview=await linkPreview(data.url);
- if(!new URL(request.url).searchParams.has('image'))return Response.json({available:!!preview.image,video:preview.video},{headers});
+ if(!new URL(request.url).searchParams.has('image'))return Response.json({available:!!preview.image,video:preview.video,description:preview.description,embed:preview.embed},{headers});
  if(!preview.image)return new Response(null,{status:404,headers});
  try{const image=await readPublic(preview.image,{image:true});return new Response(image.body,{headers:{...headers,'Content-Type':image.type}})}catch{return new Response(null,{status:404,headers})}
 }
