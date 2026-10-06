@@ -5,11 +5,11 @@ import {preparePhoto} from '../lib/photo';
 import {safeLink} from '../lib/ranking.mjs';
 import {db} from '../lib/supabase';
 const categories=['Other','Architecture','Technology','Adventure','Food','Machines','Art'];
-export default function QuickDiscovery({photo,onPhoto,onKind,onSubmit,busy}){
- const [url,setUrl]=useState(''),[title,setTitle]=useState(''),[description,setDescription]=useState(''),[checking,setChecking]=useState(false),[message,setMessage]=useState('');
+export default function QuickDiscovery({photo,onPhoto,onKind,onSubmit,busy,initialDraft}){
+ const [url,setUrl]=useState(()=>safeLink(initialDraft?.url)||safeLink(initialDraft?.text?.match(/https?:\/\/[^\s]+/)?.[0])||''),[title,setTitle]=useState(''),[description,setDescription]=useState(''),[checking,setChecking]=useState(false),[message,setMessage]=useState('');
  const version=useRef(0),timer=useRef(null),edited=useRef({title:false,description:false});
  const link=safeLink(url),fallback=link?'Discovery from '+new URL(link).hostname.replace(/^www\./,''):'A fuckin awesome find';
- useEffect(()=>{const attempt=++version.current;setChecking(false);setMessage('');setTitle('');setDescription('');edited.current={title:false,description:false};
+ useEffect(()=>{const attempt=++version.current;setChecking(false);setMessage('');setTitle('');setDescription('');edited.current={title:false,description:false};if(initialDraft?.title){setTitle(initialDraft.title);edited.current.title=true;}if(initialDraft?.photo&&url===(safeLink(initialDraft.url)||safeLink(initialDraft.text?.match(/https?:\/\/[^\s]+/)?.[0])||'')){setChecking(true);onKind(link?'link':'photo');preparePhoto(initialDraft.photo).then(file=>{if(version.current===attempt)onPhoto(file)}).catch(e=>{if(version.current===attempt)setMessage(e.message)}).finally(()=>{if(version.current===attempt)setChecking(false)});return()=>{version.current++};}
   if(link)timer.current=setTimeout(async()=>{setChecking(true);try{const {data}=await db.auth.getSession();const options={method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+(data.session?.access_token||'')},body:JSON.stringify({url:link,mode:'details'})};const response=await fetch('/api/preview',options);if(!response.ok)throw Error(response.status===401?'Sign in again to check this link.':response.status===429?'Preview checks are busy. Add a screenshot to keep going.':'We couldn’t read this link. Add a screenshot to keep going.');const metadata=await response.json();if(version.current!==attempt)return;
    if(!edited.current.title&&metadata.title)setTitle(metadata.title);if(!edited.current.description&&metadata.description)setDescription(metadata.description);
    if(!metadata.hasImage){setMessage('This site keeps its preview private. Add a screenshot or photo—no description needed.');return}
