@@ -1,1 +1,2 @@
 The current hero is an AI-enhanced and panorama-extended version of the user-supplied volcanic lightning photograph, optimized as WebP. It is decorative; preserve the text legibility overlay. The prior fictional canyon artwork remains available for rollback.
+The active image is 2172 × 724 pixels and about 109 KB. Responsive object positioning keeps the lightning in frame; retain the original user photo separately from this AI-edited version.
