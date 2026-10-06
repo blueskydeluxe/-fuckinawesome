@@ -25,3 +25,8 @@ button{background:#1b1e24;border-color:#ffffff1b;border-radius:9px;transition:ba
 @media(prefers-reduced-motion:reduce){button,.brand-symbol,.card{transition:none}.card:hover,.primary:hover{transform:none}}
 
 .quick-discovery>p:first-child{color:#b7bdc7;line-height:1.5}.quick-status{padding:12px;border-left:3px solid var(--red);background:#ff343408;line-height:1.5;font-size:14px}.quick-details{border-top:1px solid #ffffff20;padding:16px 0;margin-top:18px}.quick-details summary{cursor:pointer;font-size:13px;margin-bottom:12px}.quick-details label:first-of-type{margin-top:18px}.quick-photo-note{display:none}.quick-note{font-size:11px;line-height:1.5}.quick-submit{width:100%;margin-top:10px}.quick-discovery .photo-preview{max-height:220px}.quick-discovery .photo-picker{margin-top:16px}
+
+
+/* Approved custom wordmark: preserve its letterforms and A/W spacing. */
+.brand-approved{display:block;width:clamp(230px,30vw,370px);height:auto}.brand-logo{max-width:100%}@media(max-width:600px){.brand-approved{width:min(320px,82vw)}}
+
