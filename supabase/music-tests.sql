@@ -1,0 +1,28 @@
+begin;
+insert into auth.users(id) values('26000000-0000-0000-0000-000000000001'),('26000000-0000-0000-0000-000000000002');
+select set_config('request.jwt.claim.sub','26000000-0000-0000-0000-000000000001',true);
+create temporary table music_test_state(path text,id uuid);
+do $$ declare cover text; track text; result uuid;begin
+ cover:=public.reserve_photo_upload();track:=public.reserve_music_upload();
+ insert into storage.objects(bucket_id,name,metadata) values('discovery-photos',cover,'{"mimetype":"image/jpeg","size":100}'::jsonb),('discovery-music',track,'{"mimetype":"audio/mpeg","size":100}'::jsonb);
+ begin perform public.submit_music_discovery('Test artist song','Temporary music security fixture.',cover,'Test Artist','song',null,null,null,track,false,array['music']);raise exception 'Rights confirmation bypassed';exception when raise_exception then if sqlerrm='Rights confirmation bypassed' then raise;end if;end;
+ begin perform public.submit_music_discovery('Test artist song','Temporary music security fixture.',cover,'Test Artist','song','https://open.spotify.com.evil.test/track/x',null,null,track,true,array['music']);raise exception 'Provider host bypassed';exception when raise_exception then if sqlerrm='Provider host bypassed' then raise;end if;end;
+ result:=public.submit_music_discovery('Test artist song','Temporary music security fixture.',cover,'Test Artist','song','https://open.spotify.com/track/1234567890123456789012',null,null,track,true,array['music','indie']);
+ insert into music_test_state values(track,result);
+ if not public.can_read_music(track) then raise exception 'Owner cannot hear pending track';end if;
+ if public.can_upload_music(track) or public.can_delete_music(track) then raise exception 'Submitted track can be replaced/deleted outside account cleanup';end if;
+end;$$;
+select set_config('request.jwt.claim.sub','26000000-0000-0000-0000-000000000002',true);
+do $$ begin if public.can_read_music((select path from music_test_state)) then raise exception 'Other member can hear pending track';end if;end;$$;
+select set_config('request.jwt.claim.sub','',true);
+do $$ begin if public.can_read_music((select path from music_test_state)) then raise exception 'Guest can hear pending track';end if;end;$$;
+update public.submissions set status='approved' where id=(select id from music_test_state);
+do $$ begin if not public.can_read_music((select path from music_test_state)) then raise exception 'Guest cannot hear approved track';end if;end;$$;
+update public.submissions set status='hidden' where id=(select id from music_test_state);
+do $$ begin if public.can_read_music((select path from music_test_state)) then raise exception 'Hidden track is public';end if;end;$$;
+select set_config('request.jwt.claim.sub','26000000-0000-0000-0000-000000000001',true);
+do $$ begin if jsonb_array_length(public.export_own_music()->'discoveries')<>1 then raise exception 'Music missing from own export';end if;end;$$;
+select public.prepare_photo_account_deletion('DELETE MY ACCOUNT');
+do $$ begin if cardinality(public.prepare_music_account_deletion('DELETE MY ACCOUNT'))<>1 or not public.can_delete_music((select path from music_test_state)) then raise exception 'Music account cleanup blocked';end if;end;$$;
+rollback;
+select 'PASS: music submission, rights, exact service hosts, owner-only pending audio, published/hidden audio, immutable track, export and cleanup. Fixtures rolled back.' as result;
