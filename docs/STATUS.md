@@ -48,3 +48,5 @@ Production release: https://github.com/blueskydeluxe/-fuckinawesome/pull/5 (merg
 - Orange action buttons and unified gray navigation bar with orange active underline; approved wordmark retained.
 - Google/Microsoft/Apple integration implemented, gated by actual enabled auth providers. All three remain externally blocked by missing developer application credentials. See SOCIAL_SIGN_IN.md.
 - Local production build and 13 automated tests passed; live rollback database checks passed for bookmark privacy, hidden content, self-vote exclusion, and submission quotas.
+- Three reviewed editor picks published on the existing production site: Mars helicopter flight, Webb Pillars of Creation, and General Sherman. Real covers and source credits; no added votes.
+- Release PR #18 is blocked by Vercel's 100-deployment / 24-hour Hobby-team limit. Local browser checks confirm orange CTA colors, gray/orange active navigation, next/previous/keyboard viewer navigation, and guest save sign-in gating. Signed-in UI verification and native phone shares remain pending release/device availability.
