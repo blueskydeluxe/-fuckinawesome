@@ -59,3 +59,11 @@ Production release: https://github.com/blueskydeluxe/-fuckinawesome/pull/5 (merg
 - Curated 100 new finds with original short descriptions and visually checked covers: 35 NASA images, 25 Cleveland Museum of Art CC0 objects, and 40 Wikimedia Commons images with allowed reusable licenses. Each Commons discovery includes creator credit, original photo source, license, and the resizing/compression notice. Lightbox descriptions now display clickable source/license URLs.
 - Production build and all 15 automated tests passed. Publication verification and final public count are recorded after the batch completes.
 - Final production verification: 100/100 new discoveries approved, 111 approved discoveries total, all 11 prior discoveries tagged, no source-URL duplicates or tag mismatches. Anonymous permitted signed-image checks returned JPEG 200 responses for all 100 new covers. New feed visibly displays the published finds; no synthetic votes added.
+
+## Ranked halls and card density — 2026-10-06
+- Large/Small cards control persists the visitor's preference in local storage. Small cards use four desktop columns and two phone columns, while maintaining the full viewer and voting controls.
+- Both halls show numbered places across pagination. The first qualified discovery gets a full-width champion card; second/third receive silver/bronze rank treatments. Hall of Fame uses red and Hall of Bullshit uses its meter color for the champion.
+- Category and tag filters combine within each hall and are applied by the existing server feed before pagination/ranking. Clicking or clearing a tag inside a hall preserves the hall and category. Ranking rules are explained beside the standings.
+- Qualification remains at least 10 votes and greater than 80%; an empty hall explains its open top slot. No real votes or scores were changed for presentation.
+- Production build passed. Temporary local-only fixtures verified champion/podium structure, hall-scoped tag filters, density controls, and phone layout without horizontal overflow. Fixture code was removed before the final build/release.
+- Live verification: card-size preference survived reload; Art plus #space retained Hall of Fame and category; both halls showed the qualifying-vote empty state. New feed displayed the compact grid. Release commit 1e0f3e31043581a930bb689d0dc7c67290749b98.
