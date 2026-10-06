@@ -16,3 +16,4 @@ test('video thumbnails use exact supported hosts and valid YouTube IDs',()=>{
  assert.equal(youtubeId('https://google.com/search#vld=vid:hf_zOjlxvhU,st:0'), 'hf_zOjlxvhU');
  assert.equal(youtubeId('https://youtube.com.attacker.com/watch?v=hf_zOjlxvhU'),null);
 });
+test('missing metadata does not invent an image URL',()=>{assert.equal(parsePreview('<html></html>','https://example.com/page').image,null)});
