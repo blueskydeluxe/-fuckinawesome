@@ -49,3 +49,4 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 @media(max-width:600px){.tabs button{font-size:11px;padding:13px 9px}.tabs button[aria-pressed=true]:after{left:9px;right:9px}}
 .voting button:first-child{border-color:#ff8a2a45;background:#ff8a2a0c}.voting button[aria-pressed=true]{background:var(--orange);border-color:var(--orange);color:#15100b}
 
+.hero-awesome{color:var(--red)}
