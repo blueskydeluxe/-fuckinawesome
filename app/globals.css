@@ -51,3 +51,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 
 .hero-awesome{color:var(--red)}
 .voting button:nth-child(2)[aria-pressed=true]{background:#777238;border-color:#777238;color:#fff}
+
+.discovery-tags{display:flex;gap:6px;flex-wrap:nowrap;height:30px;margin-top:10px;overflow:hidden}.discovery-tags button{padding:4px 8px;font-size:11px;color:#ffc18f;border-radius:20px;white-space:nowrap}.tag-filter{padding:12px 0;color:#ffc18f}.category-requests{margin:24px 0}.category-requests h3{font-size:24px}
+
+.viewer-tags{height:auto;flex-wrap:wrap;overflow:visible}

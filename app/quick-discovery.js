@@ -1,12 +1,15 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
+import {normalizeTags,suggestTags} from '../lib/tags.mjs';
 import PhotoPicker from './photo-picker';
 import {preparePhoto} from '../lib/photo';
 import {safeLink} from '../lib/ranking.mjs';
 import {db} from '../lib/supabase';
-const categories=['Other','Architecture','Technology','Adventure','Food','Machines','Art'];
-export default function QuickDiscovery({photo,onPhoto,onKind,onSubmit,busy,initialDraft}){
+const defaultCategories=['Other','Architecture','Technology','Adventure','Food','Machines','Art'];
+export default function QuickDiscovery({photo,onPhoto,onKind,onSubmit,busy,initialDraft,categories=defaultCategories}){
  const [url,setUrl]=useState(()=>safeLink(initialDraft?.url)||safeLink(initialDraft?.text?.match(/https?:\/\/[^\s]+/)?.[0])||''),[title,setTitle]=useState(''),[description,setDescription]=useState(''),[checking,setChecking]=useState(false),[message,setMessage]=useState('');
+ const [tags,setTags]=useState(''),[tagsEdited,setTagsEdited]=useState(false);
+ useEffect(()=>{if(!tagsEdited)setTags(suggestTags(title+' '+description).join(', '))},[title,description,tagsEdited]);
  const version=useRef(0),timer=useRef(null),edited=useRef({title:false,description:false});
  const link=safeLink(url),fallback=link?'Discovery from '+new URL(link).hostname.replace(/^www\./,''):'A fuckin awesome find';
  useEffect(()=>{const attempt=++version.current;setChecking(false);setMessage('');setTitle('');setDescription('');edited.current={title:false,description:false};if(initialDraft?.title){setTitle(initialDraft.title);edited.current.title=true;}if(initialDraft?.photo&&url===(safeLink(initialDraft.url)||safeLink(initialDraft.text?.match(/https?:\/\/[^\s]+/)?.[0])||'')){setChecking(true);onKind(link?'link':'photo');preparePhoto(initialDraft.photo).then(file=>{if(version.current===attempt)onPhoto(file)}).catch(e=>{if(version.current===attempt)setMessage(e.message)}).finally(()=>{if(version.current===attempt)setChecking(false)});return()=>{version.current++};}
@@ -19,13 +22,13 @@ export default function QuickDiscovery({photo,onPhoto,onKind,onSubmit,busy,initi
  },[url]);
  function choosePhoto(file){clearTimeout(timer.current);version.current++;setChecking(false);setMessage('');onPhoto(file);onKind(link?'link':'photo')}
  async function pastePhoto(file){const attempt=++version.current;clearTimeout(timer.current);setChecking(true);setMessage('');try{const prepared=await preparePhoto(file);if(version.current===attempt){onPhoto(prepared);onKind(link?'link':'photo');}}catch(error){if(version.current===attempt)setMessage(error.message)}finally{if(version.current===attempt)setChecking(false)}}
- function changeLink(value){version.current++;setUrl(value);onPhoto(null);onKind(value.trim()?'link':'photo')}
+ function changeLink(value){version.current++;setUrl(value);setTags('');setTagsEdited(false);onPhoto(null);onKind(value.trim()?'link':'photo')}
  return <form className="quick-discovery" onSubmit={onSubmit} onPaste={e=>{const file=[...(e.clipboardData?.files||[])].find(x=>x.type.startsWith('image/'));if(file&&!busy){e.preventDefault();pastePhoto(file)}}} onDragOver={e=>{if(e.dataTransfer.types.includes('Files'))e.preventDefault()}} onDrop={e=>{const file=[...e.dataTransfer.files].find(x=>x.type.startsWith('image/'));if(file){e.preventDefault();if(!busy)pastePhoto(file)}}}>
   <p>Paste a link. We’ll do the rest. Or share a photo.</p><label>Link<input autoFocus name="url" type="url" value={url} maxLength={2048} placeholder="Paste what you found…" disabled={busy} onChange={e=>changeLink(e.target.value)}/></label>
   {checking&&<p role="status">Building your preview…</p>}{message&&<p className="quick-status" role="status">{message}</p>}
   <PhotoPicker compact photo={photo} onPhoto={choosePhoto} disabled={busy}/>
   {photo&&<label>Title <span className="muted">— edit if you like</span><input name="title" value={title||fallback} onChange={e=>{edited.current.title=true;setTitle(e.target.value)}} required minLength={5} maxLength={140} disabled={busy}/></label>}
-  <details className="quick-details"><summary>Add a description or category <span className="muted">(optional)</span></summary><label>Description<textarea name="description" value={description} maxLength={1000} disabled={busy} onChange={e=>{edited.current.description=true;setDescription(e.target.value)}}/></label><label>Category<select name="category" disabled={busy}>{categories.map(x=><option key={x}>{x}</option>)}</select></label></details>
+  <details className="quick-details"><summary>Add a description, category or tags <span className="muted">(optional)</span></summary><label>Description<textarea name="description" value={description} maxLength={1000} disabled={busy} onChange={e=>{edited.current.description=true;setDescription(e.target.value)}}/></label><label>Category<select name="category" disabled={busy}>{categories.map(x=><option key={x}>{x}</option>)}</select></label><label>Tags<input name="tags" value={tags} maxLength={128} placeholder="watches, cars, robotics" disabled={busy} onChange={e=>{setTagsEdited(true);setTags(e.target.value)}}/></label><p className="muted">Up to 5 tags, separated by commas. Suggested from your title and description; edit or remove any.</p></details>
   <p className="muted quick-note">Share the original source and images you have permission to share. Reviewed before going live.</p><button className="primary submission-cta quick-submit" disabled={busy||checking||!photo||!!url.trim()&&!link}>{busy?'Submitting…':'Submit Something'}</button>
  </form>;
 }
