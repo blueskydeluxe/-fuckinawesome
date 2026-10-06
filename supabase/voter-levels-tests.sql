@@ -1,0 +1,15 @@
+begin;
+insert into auth.users(id) values('25000000-0000-0000-0000-000000000001');
+insert into public.submissions(id,author_id,title,description,url,category) select md5('voter-level-test-'||n)::uuid,'25000000-0000-0000-0000-000000000001','Voter test discovery','Temporary transaction-only voting fixture.','https://example.com/level-test/'||n,'Other' from generate_series(1,25) n;
+insert into public.votes(user_id,submission_id,value) select '25000000-0000-0000-0000-000000000001',md5('voter-level-test-'||n)::uuid,1 from generate_series(1,24) n;
+do $$ begin if (select level from public.voter_levels(array['25000000-0000-0000-0000-000000000001'::uuid]))<>1 then raise exception '24 votes should be level 1';end if;end;$$;
+insert into public.votes(user_id,submission_id,value) values('25000000-0000-0000-0000-000000000001',md5('voter-level-test-25')::uuid,-1);
+update public.votes set value=-value where user_id='25000000-0000-0000-0000-000000000001';
+delete from public.votes where user_id='25000000-0000-0000-0000-000000000001' and submission_id=md5('voter-level-test-25')::uuid;
+insert into public.votes(user_id,submission_id,value) values('25000000-0000-0000-0000-000000000001',md5('voter-level-test-25')::uuid,1);
+do $$ begin if (select votes_cast from public.voter_levels(array['25000000-0000-0000-0000-000000000001'::uuid]))<>25 or (select level from public.voter_levels(array['25000000-0000-0000-0000-000000000001'::uuid]))<>2 then raise exception 'Switching/removing/recasting must not farm or remove levels';end if;end;$$;
+set local role anon;
+do $$ begin if (select level from public.voter_levels(array['25000000-0000-0000-0000-000000000001'::uuid]))<>2 then raise exception 'Public level must be visible';end if;begin perform 1 from public.voter_participation;raise exception 'Private vote history exposed';exception when insufficient_privilege then null;end;end;$$;
+reset role;
+rollback;
+select 'PASS: level boundary, switching, withdrawal, recasting, public badges, private history. All fixtures rolled back.' as result;
