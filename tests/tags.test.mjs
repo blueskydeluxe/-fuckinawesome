@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {normalizeTags,suggestTags} from '../lib/tags.mjs';
+test('tags normalize and deduplicate without silently truncating',()=>{assert.deepEqual(normalizeTags(' #Watches, watches,  super  cars '),['watches','super cars']);assert.equal(normalizeTags('a,b,c,d,e,f').length,6)});
+test('suggestions use whole words, cover specific topics, and cap at five',()=>{assert.deepEqual(suggestTags('NASA flew a helicopter on Mars'),['space']);assert.deepEqual(suggestTags('A chair'),[]);assert.deepEqual(suggestTags('Remontoire watches'),['watches']);assert.ok(suggestTags('watch cars robot nasa photography hiking architecture food ai').length<=5)});
