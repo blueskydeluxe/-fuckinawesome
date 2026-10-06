@@ -50,3 +50,12 @@ Production release: https://github.com/blueskydeluxe/-fuckinawesome/pull/5 (merg
 - Local production build and 13 automated tests passed; live rollback database checks passed for bookmark privacy, hidden content, self-vote exclusion, and submission quotas.
 - Three reviewed editor picks published on the existing production site: Mars helicopter flight, Webb Pillars of Creation, and General Sherman. Real covers and source credits; no added votes.
 - Release PR #18 is blocked by Vercel's 100-deployment / 24-hour Hobby-team limit. Local browser checks confirm orange CTA colors, gray/orange active navigation, next/previous/keyboard viewer navigation, and guest save sign-in gating. Signed-in UI verification and native phone shares remain pending release/device availability.
+
+## Tagged curated collection — 2026-10-06
+
+- Added topic tags to all 11 existing approved discoveries.
+- Applied 017_curation_capacity.sql: moderator new-discovery allowance 150/day; member allowance remains 10/day. Existing ownership, storage-ticket, JPEG, and moderation checks are retained.
+- Moderator collection importer uses the normal authenticated upload, tagged submission, and approval RPCs. It skips exact source-URL duplicates and reports each result. No user accounts or votes are fabricated.
+- Curated 100 new finds with original short descriptions and visually checked covers: 35 NASA images, 25 Cleveland Museum of Art CC0 objects, and 40 Wikimedia Commons images with allowed reusable licenses. Each Commons discovery includes creator credit, original photo source, license, and the resizing/compression notice. Lightbox descriptions now display clickable source/license URLs.
+- Production build and all 15 automated tests passed. Publication verification and final public count are recorded after the batch completes.
+- Final production verification: 100/100 new discoveries approved, 111 approved discoveries total, all 11 prior discoveries tagged, no source-URL duplicates or tag mismatches. Anonymous permitted signed-image checks returned JPEG 200 responses for all 100 new covers. New feed visibly displays the published finds; no synthetic votes added.
