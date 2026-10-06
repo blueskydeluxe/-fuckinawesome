@@ -10,6 +10,7 @@ select set_config('request.jwt.claim.sub','',true);
 set local role anon;
 do $$begin
  if exists(select 1 from public.discovery_feed() where id='24000000-0000-0000-0000-000000000001') then raise exception 'FAIL coverless public feed';end if;
+ if has_function_privilege('anon','public.reserve_discovery_cover(uuid)','execute') then raise exception 'FAIL anonymous cover reservation';end if;
  if has_function_privilege('anon','public.set_discovery_cover(uuid,text)','execute') or has_function_privilege('anon','public.submit_photo(text,text,text,text,text)','execute') then raise exception 'FAIL anonymous cover mutations';end if;
 end$$;
 reset role;
@@ -19,10 +20,15 @@ do $$begin begin perform public.set_discovery_cover('24000000-0000-0000-0000-000
 reset role;
 select set_config('request.jwt.claim.sub','14000000-0000-0000-0000-000000000001',true);
 set local role authenticated;
+reset role;
+insert into public.photo_uploads(user_id,path) select '14000000-0000-0000-0000-000000000001','14000000-0000-0000-0000-000000000001/'||gen_random_uuid()::text||'.jpg' from generate_series(1,10);
+set local role authenticated;
 do $$declare path text;begin
+ begin perform public.reserve_photo_upload();raise exception 'FAIL daily submission cap';exception when raise_exception then if sqlerrm<>'You can start up to 10 submissions per day. Try again tomorrow.' then raise;end if;end;
  path:=public.reserve_discovery_cover('24000000-0000-0000-0000-000000000001');
  begin perform public.set_discovery_cover('24000000-0000-0000-0000-000000000001',path);raise exception 'FAIL cover without stored file';exception when raise_exception then if sqlerrm<>'Upload your cover before saving.' then raise;end if;end;
  begin perform public.submit_photo('Cover test','Disposable cover description',path,'Other','https://user:secret@example.com');raise exception 'FAIL credentials URL';exception when raise_exception then if sqlerrm<>'Use a complete public http or https link.' then raise;end if;end;
+ begin perform public.submit_photo('Cover test','Disposable cover description',path,'Other','https://example.net');raise exception 'FAIL cover reservation used for submission';exception when raise_exception then if sqlerrm<>'Use a new submission upload.' then raise;end if;end;
  if not exists(select 1 from public.discovery_feed('My discoveries') where id='24000000-0000-0000-0000-000000000001') then raise exception 'FAIL owner cannot repair coverless item';end if;
 end$$;
 reset role;
