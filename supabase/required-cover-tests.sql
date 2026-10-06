@@ -20,7 +20,7 @@ reset role;
 select set_config('request.jwt.claim.sub','14000000-0000-0000-0000-000000000001',true);
 set local role authenticated;
 do $$declare path text;begin
- path:=public.reserve_photo_upload();
+ path:=public.reserve_discovery_cover('24000000-0000-0000-0000-000000000001');
  begin perform public.set_discovery_cover('24000000-0000-0000-0000-000000000001',path);raise exception 'FAIL cover without stored file';exception when raise_exception then if sqlerrm<>'Upload your cover before saving.' then raise;end if;end;
  begin perform public.submit_photo('Cover test','Disposable cover description',path,'Other','https://user:secret@example.com');raise exception 'FAIL credentials URL';exception when raise_exception then if sqlerrm<>'Use a complete public http or https link.' then raise;end if;end;
  if not exists(select 1 from public.discovery_feed('My discoveries') where id='24000000-0000-0000-0000-000000000001') then raise exception 'FAIL owner cannot repair coverless item';end if;
