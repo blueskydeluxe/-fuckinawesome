@@ -67,3 +67,9 @@ Production release: https://github.com/blueskydeluxe/-fuckinawesome/pull/5 (merg
 - Qualification remains at least 10 votes and greater than 80%; an empty hall explains its open top slot. No real votes or scores were changed for presentation.
 - Production build passed. Temporary local-only fixtures verified champion/podium structure, hall-scoped tag filters, density controls, and phone layout without horizontal overflow. Fixture code was removed before the final build/release.
 - Live verification: card-size preference survived reload; Art plus #space retained Hall of Fame and category; both halls showed the qualifying-vote empty state. New feed displayed the compact grid. Release commit 1e0f3e31043581a930bb689d0dc7c67290749b98.
+
+## Voter levels — 2026-10-06
+- Level 1 starts at zero; every 25 distinct discoveries voted on adds one level. Both vote directions count. Existing recorded votes were backfilled into private participation records.
+- Credit is lifetime and idempotent: switching, withdrawing, or recasting cannot farm levels or erase earned credit. Participation records remain after discovery deletion and cascade away with account deletion. Only the votes trigger writes credit; public clients can read aggregate counts/levels but cannot inspect or write the private ledger.
+- Signed-in sticky header shows progress and votes remaining. Badges appear next to card authors, public profile names, account-menu names, and weekly leaderboard usernames. Profile form shows progress; account export includes voter-level statistics. Privacy page explains public levels and retained private participation credit.
+- Production build and 16 automated tests passed. Live rollback SQL checks passed for the 25-vote boundary, switching, withdrawal/recasting, public level display, and raw history privacy. Live owner's actual 41 recorded votes yield Level 2, 16/25 progress, 9 to Level 3; card, menu, and public profile badges verified.
