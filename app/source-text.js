@@ -1,0 +1,2 @@
+import {safeLink} from '../lib/ranking.mjs';
+export default function SourceText({text}){return <>{String(text||'').split(/(https?:\/\/[^\s]+)/g).map((part,i)=>{const url=safeLink(part);return url?<a key={i} href={url} target="_blank" rel="noopener noreferrer">{new URL(url).hostname==='creativecommons.org'?'Image license':new URL(url).hostname==='commons.wikimedia.org'?'Photo source':part}</a>:part})}</>}
