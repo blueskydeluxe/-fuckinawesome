@@ -26,6 +26,7 @@ export default function QuickDiscovery({photo,onPhoto,onKind,onSubmit,busy}){
   <PhotoPicker compact photo={photo} onPhoto={choosePhoto} disabled={busy}/>
   {photo&&<label>Title <span className="muted">— edit if you like</span><input name="title" value={title||fallback} onChange={e=>{edited.current.title=true;setTitle(e.target.value)}} required minLength={5} maxLength={140} disabled={busy}/></label>}
   <details className="quick-details"><summary>Add a description or category <span className="muted">(optional)</span></summary><label>Description<textarea name="description" value={description} maxLength={1000} disabled={busy} onChange={e=>{edited.current.description=true;setDescription(e.target.value)}}/></label><label>Category<select name="category" disabled={busy}>{categories.map(x=><option key={x}>{x}</option>)}</select></label></details>
-  <p className="muted quick-note">Share the original source and images you have permission to share. Reviewed before going live.</p><button className="primary quick-submit" disabled={busy||checking||!photo||!!url.trim()&&!link}>{busy?'Sharing…':'Share this discovery'} ↗</button>
+  <p className="muted quick-note">Share the original source and images you have permission to share. Reviewed before going live.</p><button className="primary submission-cta quick-submit" disabled={busy||checking||!photo||!!url.trim()&&!link}>{busy?'Submitting…':'Submit Something'}</button>
  </form>;
 }
+
