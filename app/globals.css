@@ -50,3 +50,4 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .voting button:first-child{border-color:#ff8a2a45;background:#ff8a2a0c}.voting button[aria-pressed=true]{background:var(--orange);border-color:var(--orange);color:#15100b}
 
 .hero-awesome{color:var(--red)}
+.voting button:nth-child(2)[aria-pressed=true]{background:#777238;border-color:#777238;color:#fff}
