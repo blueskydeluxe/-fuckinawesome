@@ -1,1 +1,1 @@
-Hero artwork is an original generated fictional canyon scene, optimized as WebP. It is decorative; keep the dark text overlay for legibility.
+The current hero is an AI-enhanced and panorama-extended version of the user-supplied volcanic lightning photograph, optimized as WebP. It is decorative; preserve the text legibility overlay. The prior fictional canyon artwork remains available for rollback.
