@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {voterProgress} from '../lib/voter-levels.mjs';
+test('voter levels advance precisely every 25 credited discoveries',()=>{assert.deepEqual(voterProgress(0),{total:0,level:1,progress:0,remaining:25});assert.equal(voterProgress(24).level,1);assert.deepEqual(voterProgress(25),{total:25,level:2,progress:0,remaining:25});assert.equal(voterProgress(49).remaining,1);assert.equal(voterProgress(50).level,3)});
