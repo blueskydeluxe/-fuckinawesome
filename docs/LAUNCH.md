@@ -1,45 +1,19 @@
 # Phase 1 launch handoff
 
-The original index.html is preserved. The application uses Next.js App Router and Supabase Auth/Postgres; Vercel remains the hosting provider. No demo scores or submissions are presented as real activity.
+See STATUS.md for the current connected-project and verification state. Original index.html is preserved; the application uses Next.js App Router and Supabase. Vercel remains the hosting provider.
 
-## Connect the database
+## Recreating an environment
 
-1. Create a Supabase project. Keep the database password private.
-2. Run `supabase/001_foundation.sql` once in its SQL Editor.
-3. Set Auth → URL Configuration → Site URL to `https://fuckinawesome.com`. Add the exact Vercel preview URL and `http://localhost:3000` as redirects for testing. Avoid broad wildcard redirects for production.
-4. Configure a production email provider in Supabase Auth. The built-in email sender is for testing and is unsuitable for a public launch. Enable appropriate auth rate limits and bot protection before public launch.
-5. Add the project URL and publishable key as `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` in Vercel. These two values are intended for browser use. Never add a service-role key to the client or repository.
-6. Sign in once. In the SQL Editor, grant the owner moderator access using their exact user UUID:
+Apply supabase/001_foundation.sql, 002_report_resolution.sql, 003_paginated_feed.sql, and 004_account_controls.sql in order, once. Configure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY in Vercel. Never commit service-role credentials. Use Next.js framework defaults and pnpm build. Configure exact Auth redirect URLs, production SMTP, and Turnstile with the correct hostnames and matching browser sitekey; the private Turnstile secret belongs only in Supabase Auth protection settings.
 
-```sql
-update public.profiles set is_moderator = true where id = 'OWNER-USER-UUID';
-```
+Run pnpm test and pnpm build. Run SQL suites with disposable fixtures and rollback in a test environment: security-tests.sql, report-resolution-tests.sql, feed-tests.sql, and account-controls-tests.sql. Review tests before using a populated database. Database tests do not replace browser/email delivery checks.
 
-The site cannot grant moderator status. Only database administration can do so.
+## Production cutover
 
-## Vercel cutover
+Review the preview and community/privacy information with the owner. Confirm regular-member sign-in and moderation isolation. Merge the draft PR to main after release approval. Wait for Vercel Ready, then verify fuckinawesome.com sign-in, submission/review, voting, profile export, public sharing, report resolution, and mobile layout. Never delete the owner's account to test deletion; use disposable test identities. Preserve existing DNS and email records. Vercel deployment rollback provides an application rollback; never drop the database as a rollback step.
 
-Use a preview deployment from `mvp-phase-1` first. Change framework preset from Other to Next.js, output directory to framework default, and remove any old static-build overrides. Install with pnpm; build with `pnpm build`. Set the public database environment variables for preview and production, then rebuild. Verify the preview before merging to the production branch. Preserve DNS and SSL configuration.
+## Scope
 
-## Required verification before launch
+Discoveries are external links with category illustrations, without file uploads or automatic URL fetching. Feed ranking is global SQL with 50-item offset pages and deterministic tie ordering; rankings can shift as new votes arrive. Custom share previews, moderator search, stronger vote-abuse detection, cursor pagination, and load testing remain future improvements. All submissions require moderator review. Account deletion removes associated community records; moderator accounts require support handling.
 
-- Run `pnpm test` and `pnpm build`.
-- Run `supabase/security-tests.sql` in a dedicated test project after applying the schema. It rolls back its fixtures. This SQL suite passed against the newly created, empty project on October 5, 2026, with its fixtures rolled back.
-- Sign in with two separate email accounts and confirm email redirects land on the intended host.
-- Submit a discovery, refresh, and confirm it remains pending. Signed-out visitors and the other account must not see it.
-- Approve with the owner account. Confirm ordinary users cannot approve, hide, or change moderator status through API requests.
-- Vote from both accounts. Repeating a vote removes it; changing sides changes the aggregate. Confirm scores survive refresh and each account has only one vote per discovery.
-- Confirm profiles save without exposing email addresses. Open member and discovery sharing links in a separate browser.
-- Report a discovery. Confirm reports are visible only to moderators, and hiding the discovery removes it from the public feed.
-- Test keyboard navigation, dialog Escape/Tab behavior, mobile layout, email delivery, empty states, and network failures.
-
-## Current scope and remaining hardening
-
-Submissions are links with category illustrations, rather than file uploads or fetched thumbnails. Links are never fetched by the server, avoiding an unnecessary URL-fetching attack surface. Sharing currently uses stable query-string URLs and generic site metadata; custom social images and per-discovery metadata remain future improvements.
-
-The first release retrieves the newest 200 visible discoveries and ranks that set on the client. Before a larger launch, move ranking and pagination into database queries so older Hall of Fame entries remain discoverable at scale. Add a report resolution workflow, moderator search, account deletion/export, and formal community/privacy policies before opening the community broadly. Submission and report limits are enforced in the database; vote abuse monitoring and broader bot controls still need live validation.
-
-Current validations cover successful local production builds with and without Supabase configured, ranking/link unit tests, the connected empty-feed browser check, and the database permission/voting suite. Real email sign-in, browser submissions/moderation, concurrency under load, and deployed Vercel behavior still need verification. No production launch is claimed. See STATUS.md for the connected project details.
-
-The migration document was not present in this workspace or the referenced chat's attachments; reconcile it when supplied.
-
+The migration document was not present in this workspace or the referenced conversation. Reconcile it when supplied.

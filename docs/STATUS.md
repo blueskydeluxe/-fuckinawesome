@@ -1,18 +1,28 @@
-# Connected project status
+# Phase 1 launch status — October 6, 2026
 
-Supabase project: fuckinawesome (blreebdgdgulnrmdaxlb), Free organization Fuckin Awesome, Canada Central.
+The original static index.html is preserved. MVP uses Next.js App Router, Supabase Auth/Postgres, Vercel hosting, Resend email, and Cloudflare Turnstile. Preview: https://fuckinawesome-git-mvp-phase-1-fuckin-awesome.vercel.app. Draft PR: https://github.com/blueskydeluxe/-fuckinawesome/pull/1.
 
-Foundation migration and 002_report_resolution.sql have been applied. Do not rerun them. Database tests passed for pending-content isolation, role protection, moderator-only actions, vote uniqueness/change/removal, hidden-content isolation, and protected report resolution. Fixtures were rolled back.
+Migrations 001 through 004 are applied to Supabase project blreebdgdgulnrmdaxlb. Do not rerun them. Public environment values are set in Vercel Preview and Production. Auth Site URL is https://fuckinawesome.com; redirects include the exact preview and localhost. Owner is a moderator. Sign-in email domain auth.fuckinawesome.com is verified. support@fuckinawesome.com receives mail, as tested by the owner. Turnstile protection is enabled and owner sign-in succeeded after refreshing the old form.
 
-Resend SMTP is configured for Fuckin Awesome <signin@auth.fuckinawesome.com>. The email domain is verified. Resend shows a delivered sign-in email, and the owner signed into the hosted preview. The owner has moderator access.
+## Verified
 
-Browser checks passed: submission saved, approval, changing/removing/restoring votes, profile save, public profile/discovery links, report delivery, hide from feed, reapproval, and Mark handled. The launch-verification report was resolved. Mobile layout checked at 390x844. Unit tests and production build pass.
+- Build and all three unit tests passed.
+- Database tests cover private pending content, protected moderator role/actions, vote uniqueness/change/removal, hidden content, and report resolution. Rerun security suite passed October 6; fixtures rolled back.
+- Feed ranks all visible discoveries in SQL, with 50-item pages. A 205-discovery rollback test verified an older Hall of Fame winner and pagination/privacy boundaries.
+- Browser checks passed for owner sign-in, submission, approval, vote change/removal/restoration, profile save, sharing, reporting, hide/reapprove, and marking reports handled. Mobile feed checked at 390x844.
+- Account-control rollback tests passed: export isolation, exact deletion confirmation, complete active-data deletion, preservation of other accounts, and moderator deletion protection.
 
-Hosted preview: https://fuckinawesome-git-mvp-phase-1-fuckin-awesome.vercel.app
-Draft review: https://github.com/blueskydeluxe/-fuckinawesome/pull/1
+## Account controls
 
-Vercel uses Next.js defaults with public Supabase URL and publishable key set for Preview and Production. Exact auth redirects include the preview and localhost:3000; Site URL is https://fuckinawesome.com. No secrets are committed.
+export_account() accepts no identity parameter and returns only the authenticated caller's account, profile, submissions, votes, and reports. It rejects anonymous and deleted users. Reports omit the resolving moderator ID.
 
-Production branch remains unmerged. Before broad public launch: second-account end-to-end check, bot protection, full-feed pagination/ranking beyond newest 200 items, account deletion/export, and owner-reviewed privacy/community policies. Passing current workflow tests does not complete these requirements.
+delete_own_account(text) requires DELETE MY ACCOUNT and rejects moderator accounts. It removes the caller's submissions (with associated votes/reports/moderation records), clears profile foreign-key dependencies, and removes auth.users with cascading profile/votes/reports cleanup in one transaction. The app signs out locally afterward. Existing short-lived JWTs may remain cryptographically valid until expiry; removed profile/FK checks prevent writes and export. This project has no uploaded storage objects. Add a storage cleanup path if file uploads are introduced. No service-role secret is exposed.
 
-GitHub changes were uploaded through the signed-in browser. Local history differs from remote history; reconcile before future command-line pushes. The migration document was not available in the referenced conversation or workspace.
+## Before production cutover
+
+- Verify deployed profile download and community/privacy pages.
+- Have owner review community/privacy copy and support contact.
+- Complete a second real email-account browser check (database isolation checks already pass).
+- Review PR and merge to main only after release approval; verify production sign-in redirect, feed, and headers after deployment. Preserve website/email DNS and SSL.
+
+No production launch is claimed. GitHub updates use the signed-in browser; local and remote git histories differ. Do not force push. The migration document was not available in this workspace or referenced chat.
