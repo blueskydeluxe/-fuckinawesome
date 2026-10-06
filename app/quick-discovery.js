@@ -5,7 +5,7 @@ import PhotoPicker from './photo-picker';
 import {preparePhoto} from '../lib/photo';
 import {safeLink} from '../lib/ranking.mjs';
 import {db} from '../lib/supabase';
-const defaultCategories=['Other','Architecture','Technology','Adventure','Food','Machines','Art'];
+const defaultCategories=['Other','Architecture','Technology','Adventure','Food','Machines','Art','Music'];
 export default function QuickDiscovery({photo,onPhoto,onKind,onSubmit,busy,initialDraft,categories=defaultCategories}){
  const [url,setUrl]=useState(()=>safeLink(initialDraft?.url)||safeLink(initialDraft?.text?.match(/https?:\/\/[^\s]+/)?.[0])||''),[title,setTitle]=useState(''),[description,setDescription]=useState(''),[checking,setChecking]=useState(false),[message,setMessage]=useState('');
  const [tags,setTags]=useState(''),[tagsEdited,setTagsEdited]=useState(false);
