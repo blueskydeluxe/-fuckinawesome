@@ -81,3 +81,10 @@ Production release: https://github.com/blueskydeluxe/-fuckinawesome/pull/5 (merg
 - Uploaders affirm permission to distribute music and covers. Existing review/report workflows remain; this is not automated copyright verification.
 - Production build and 19 automated tests passed. Live rollback SQL verified rights checks, exact provider hosts, pending/public/hidden audio visibility, immutability, export, and cleanup.
 - A real original two-second test MP3 was uploaded through the production form and decoded/played successfully (2.0375 seconds, no media error). Its pending discovery was soft-deleted after verification, never approved or voted on. Public collection remains 111 approved discoveries.
+
+## Smooth voting and discovery sharing — 2026-10-06
+- Unvoted votes refresh the feed in the background without replacing the grid with a loading message. Remaining cards and covers stay mounted.
+- Voting in the Unvoted lightbox advances to the next available discovery. Undo restores the previous vote; level credit remains lifetime/idempotent. Progress is shown inside the lightbox; final-card completion retains Undo on the page.
+- Cover URLs are shared between grid and lightbox with in-flight deduplication and a 45-second reuse window under the existing 60-second signature lifetime. Offscreen cover signing and source preview lookups wait until near the viewport.
+- New sharing links use /discovery/[id], with server-rendered discovery content, canonical URL, Open Graph/Twitter title, description, live score, and a stable cover route. Public anonymous database/storage access restricts pages and covers to approved, undeleted discoveries; no service-role credential is used.
+- 23 automated tests and the production build passed. Local-only UI fixtures verified advance for both votes, level boundary, Undo, final-card completion/recovery, and retained loaded covers. Mock account/data were removed before build and release; no production votes were fabricated.
