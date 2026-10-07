@@ -26,3 +26,22 @@ Official instructions: https://supabase.com/docs/guides/auth/social-login/auth-a
 
 ## Final verification after credentials are configured
 Sign in with a real test account for each provider on production. Verify redirect back, profile creation, voting, saving, and sign-out. Test cancellation and an existing email account. Apple private relay may use a different email, so do not assume it shares an existing account. These end-to-end provider checks are pending until developer account configuration is completed.
+
+## Expanded provider support (October 6, 2026)
+Client supports Google, Apple, Facebook, Microsoft (azure), Discord, GitHub, Spotify, LinkedIn OIDC, X OAuth 2.0 (x), and Twitch. Only enabled providers appear. Primary consumer providers appear first; other providers are in an expandable menu. Facebook and Microsoft explicitly request email. Instagram is not offered as a generic identity provider.
+Live dashboard audit: all listed social providers are disabled; email confirmation is enabled. Provider applications and credentials are still required. Do not represent this integration as active social authentication until each provider is configured and its real redirect tested.
+
+### Account matching
+Supabase automatically links identities with the same verified email into a single auth user. Existing profile, discoveries, votes, saves, and voter credit stay keyed to the same user ID. No application-side merging or email lookup is needed. Never merge by display name or unverified email. Different emails, Apple relay addresses, or identities already belonging to separate users need a separate verified ownership workflow; do not rewrite ownership rows as a shortcut. Manual linking remains disabled and is outside this same-email request.
+Verification after activation: sign in through Google/Facebook using an existing email-account address; confirm the auth user UUID, owned discovery IDs and credited total are unchanged. Also test a new user, cancellation, denied email permission, and a different-email account.
+
+### Additional provider setup
+Use the shared callback above for every provider. Official setup instructions:
+- Facebook: https://supabase.com/docs/guides/auth/social-login/auth-facebook
+- Discord: https://supabase.com/docs/guides/auth/social-login/auth-discord
+- GitHub: https://supabase.com/docs/guides/auth/social-login/auth-github
+- Spotify: https://supabase.com/docs/guides/auth/social-login/auth-spotify
+- LinkedIn: https://supabase.com/docs/guides/auth/social-login/auth-linkedin (OIDC)
+- X: https://supabase.com/docs/guides/auth/social-login/auth-twitter (OAuth 2.0 provider x)
+- Twitch: https://supabase.com/docs/guides/auth/social-login/auth-twitch
+Provider secrets stay only in Supabase provider settings, never in this repository. Public access may depend on each provider's app publication, review, account enrollment, or credential expiry requirements.
