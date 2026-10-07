@@ -117,3 +117,5 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 
 /* Shared hero CTA geometry overrides link margins and mobile stacking. */
 .hero .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:min(460px,100%);margin:0 auto;gap:12px}.hero .actions .submission-cta{grid-column:1;grid-row:1}.hero .actions .discovery-cta{grid-column:2;grid-row:1}.hero .actions .submission-cta,.hero .actions .discovery-cta{display:flex;align-items:center;justify-content:center;width:100%;max-width:none;height:48px;min-height:48px;margin:0;padding:0 12px;border-radius:9px;font-size:13px!important;line-height:1.2;font-weight:900;text-decoration:none;white-space:normal}@media(max-width:600px){.hero .actions{gap:8px}.hero .actions .submission-cta,.hero .actions .discovery-cta{font-size:12px!important;padding:0 8px}}
+
+.voting .meh-vote{background:#30343b;color:#e2e5eb;border-color:#626975;text-align:center}.voting .meh-vote:hover{background:#404751;border-color:#b1bac7;color:#fff}.voting .meh-vote:focus-visible{outline-color:#d6dce5}
