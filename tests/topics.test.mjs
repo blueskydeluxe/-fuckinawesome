@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {popularTopics} from '../lib/topics.mjs';
+test('topics qualify at ten distinct discoveries and are ranked by frequency',()=>{const rows=Array.from({length:11},(_,i)=>({tags:i<9?['watches','art','art']:['art']}));assert.deepEqual(popularTopics(rows),[{tag:'art',count:11}]);rows.push({tags:['watches']});assert.deepEqual(popularTopics(rows),[{tag:'art',count:11},{tag:'watches',count:10}])});
+test('invalid tags cannot become navigation labels',()=>{assert.deepEqual(popularTopics([{tags:['<script>','ART',null,'ok']}],1),[{tag:'ok',count:1}])});
