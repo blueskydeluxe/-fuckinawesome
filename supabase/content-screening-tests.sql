@@ -1,0 +1,33 @@
+-- Run after migrations 022 and 023. Fixtures are rolled back.
+begin;
+insert into auth.users(id) values('18000000-0000-0000-0000-000000000001'),('18000000-0000-0000-0000-000000000002'),('18000000-0000-0000-0000-000000000003');
+update public.profiles set is_moderator=true where id='18000000-0000-0000-0000-000000000003';
+select set_config('request.jwt.claim.sub','18000000-0000-0000-0000-000000000001',true);
+set local role authenticated;
+select public.submit_profile_photo('data:image/jpeg;base64,/9j/2Q==');
+do $$begin
+ if (select count(*) from public.profile_photos)<>1 then raise exception 'FAIL owner access';end if;
+ begin perform public.review_profile_photo('18000000-0000-0000-0000-000000000001',true);raise exception 'FAIL owner self-approval';exception when raise_exception then if sqlerrm<>'Moderator access required.' then raise;end if;end;
+ if has_table_privilege('authenticated','public.content_screenings','INSERT') then raise exception 'FAIL client scan forgery';end if;
+end$$;
+reset role;
+select set_config('request.jwt.claim.sub','18000000-0000-0000-0000-000000000002',true);
+set local role authenticated;
+do $$begin if exists(select 1 from public.profile_photos) then raise exception 'FAIL pending photo leaked';end if;end$$;
+reset role;
+select set_config('request.jwt.claim.sub','18000000-0000-0000-0000-000000000003',true);
+set local role authenticated;
+do $$begin begin perform public.review_profile_photo('18000000-0000-0000-0000-000000000001',true);raise exception 'FAIL unscreened approval';exception when raise_exception then if sqlerrm<>'Image safety screening must pass before approval.' then raise;end if;end;end$$;
+reset role;
+insert into public.content_screenings(asset_key,verdict) values('profile:18000000-0000-0000-0000-000000000001:'||md5('data:image/jpeg;base64,/9j/2Q=='),'passed');
+set local role authenticated;
+select public.review_profile_photo('18000000-0000-0000-0000-000000000001',true);
+reset role;
+set local role anon;
+do $$begin if (select count(*) from public.public_profile_photos(array['18000000-0000-0000-0000-000000000001'::uuid]))<>1 then raise exception 'FAIL approved photo unavailable';end if;end$$;
+reset role;
+update public.profile_photos set pending_image='data:image/jpeg;base64,/9j/2QA=',status='pending' where user_id='18000000-0000-0000-0000-000000000001';
+set local role authenticated;
+do $$begin begin perform public.review_profile_photo('18000000-0000-0000-0000-000000000001',true);raise exception 'FAIL replacement reused old scan';exception when raise_exception then if sqlerrm<>'Image safety screening must pass before approval.' then raise;end if;end;end$$;
+reset role;
+rollback;
