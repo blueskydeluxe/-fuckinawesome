@@ -21,7 +21,7 @@ export default function DiscoveryDialog({focusComments,user,moderator,onLogin,qu
   <div className="viewer-navigation"><button autoFocus className="close" aria-label="Close discovery" onClick={onClose}>×</button><button disabled={!hasPrevious||busy} onClick={onPrevious} aria-label="Previous discovery">← Previous</button><span aria-live="polite">{position}</span><button disabled={!hasNext||busy} onClick={onNext} aria-label="Next discovery">Next →</button></div>
   {queueProgress&&<div className="swipe-help">← It’s Bullshit · Swipe to vote · Fuckin Awesome →</div>}
   {onUndo&&<button className="swipe-undo" disabled={busy} onClick={onUndo}>↶ Undo last vote</button>}
-  <div className={swipe.className} style={swipe.style} {...swipe.handlers}>
+  <div className={swipe.className} ref={swipe.ref} {...swipe.handlers}>
   {swipe.drag!==0&&<div className="swipe-verdict" aria-hidden="true">{swipe.drag>0?"FUCKIN AWESOME":"IT’S BULLSHIT"}</div>}
   <h2 id="discovery-dialog-title" className="viewer-title">{item.title}</h2>
   <div className="discovery-dialog-media">{playing&&preview?.embed?<iframe src={preview.embed} title={`Video: ${item.title}`} allow="encrypted-media; fullscreen; picture-in-picture" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/>:image&&!imageFailed?<><img src={image} alt={item.title} onError={()=>setImageFailed(true)}/>{preview?.embed&&<button className="dialog-play" onClick={()=>setPlaying(true)}>▶ Watch video here</button>}</>:<div className="dialog-media-missing"><p>{preview===null?'Loading discovery…':'This site doesn’t provide a viewable preview.'}</p>{preview?.embed&&<button onClick={()=>setPlaying(true)}>▶ Watch video here</button>}</div>}</div>
