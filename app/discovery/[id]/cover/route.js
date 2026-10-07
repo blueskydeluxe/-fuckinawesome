@@ -1,0 +1,3 @@
+import {publicDiscovery,publicClient} from '../../../../lib/public-discovery.mjs';
+export const dynamic='force-dynamic';
+export async function GET(request,{params}){const {id}=await params;const headers={'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'};const item=await publicDiscovery(id);if(!item?.image_path)return new Response(null,{status:404,headers});const {data,error}=await publicClient().storage.from('discovery-photos').download(item.image_path);if(error||!data)return new Response(null,{status:404,headers});return new Response(await data.arrayBuffer(),{headers:{...headers,'Content-Type':'image/jpeg'}})}
