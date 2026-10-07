@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {voteSummary,MEH_VOTE} from '../lib/vote-summary.mjs';import {discoveryDescription} from '../lib/public-discovery.mjs';
+test('neutral votes count without adding to either meter',()=>{assert.equal(MEH_VOTE,2);assert.deepEqual(voteSummary(8,0,2),{up:8,down:0,neutral:2,total:10,awesomePercent:80,bullshitPercent:0});assert.equal(voteSummary(0,0,4).total,4);assert.equal(voteSummary(0,0,4).awesomePercent,0);assert.equal(voteSummary(0,0,4).bullshitPercent,0)});
+test('share summaries count indifferent votes',()=>{assert.match(discoveryDescription({up_votes:8,down_votes:0,neutral_votes:2}),/80% awesome · 10 votes/)});
