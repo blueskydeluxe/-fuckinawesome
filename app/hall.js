@@ -5,6 +5,7 @@ import VoterProgress,{LevelBadge} from './voter-progress';
 import CuratedImport from './curated-import';
 import CategorySuggestions from './category-suggestions';
 import {normalizeTags} from '../lib/tags.mjs';
+import {canonicalTag} from '../lib/tag-aliases.mjs';
 import DiscoveryRewards from './discovery-rewards';
 import DiscoveryNotifications from './discovery-notifications';
 import VoteMeters from './vote-meters';
@@ -43,8 +44,8 @@ export default function Hall({initialDiscovery=null,initialItem=null}) {
 
  const [categoryOptions,setCategoryOptions]=useState(categories),[selectedTag,setSelectedTag]=useState(null),[itemTags,setItemTags]=useState({});
  async function loadCategories(){if(db){const {data,error}=await db.from('discovery_categories').select('name').order('name');if(!error&&data?.length)setCategoryOptions(data.map(x=>x.name))}}
- useEffect(()=>{loadCategories();const tag=new URLSearchParams(location.search).get('tag');if(tag&&/^[a-z0-9]+([ -][a-z0-9]+)*$/.test(tag)&&tag.length<=24){setSelectedTag(tag);setTagSearch(tag)}else{const q=new URLSearchParams(location.search).get('q');if(q&&q.length<=100){setSearchQuery(q);setTagSearch(q)}}},[]);
- function browseTag(tag){setSearchQuery('');setSelectedTag(tag);setTagSearch(tag||'');if(!['Hall of Fame','Hall of Bullshit','Unvoted'].includes(view)){if(category==='Music')setView('New');else{setView('Trending')}}setPublicProfile(null);setDetail(null);setPage(0);setOpenedDiscovery(null);history.replaceState(null,'',tag?'/?tag='+encodeURIComponent(tag):'/')}
+ useEffect(()=>{loadCategories();const tag=new URLSearchParams(location.search).get('tag');if(tag&&/^[a-z0-9]+([ -][a-z0-9]+)*$/.test(tag)&&tag.length<=24){setSelectedTag(canonicalTag(tag));setTagSearch(canonicalTag(tag))}else{const q=new URLSearchParams(location.search).get('q');if(q&&q.length<=100){setSearchQuery(q);setTagSearch(q)}}},[]);
+ function browseTag(tag){tag=tag?canonicalTag(tag):null;setSearchQuery('');setSelectedTag(tag);setTagSearch(tag||'');if(!['Hall of Fame','Hall of Bullshit','Unvoted'].includes(view)){if(category==='Music')setView('New');else{setView('Trending')}}setPublicProfile(null);setDetail(null);setPage(0);setOpenedDiscovery(null);history.replaceState(null,'',tag?'/?tag='+encodeURIComponent(tag):'/')}
   const [user,setUser]=useState(null),[items,setItems]=useState(initialItem?[initialItem]:[]),[votes,setVotes]=useState({}),[profile,setProfile]=useState(null),[view,setView]=useState('Trending'),[category,setCategory]=useState('All'),[message,setMessage]=useState(''),[busy,setBusy]=useState(false),[loading,setLoading]=useState(configured&&!initialItem),[modal,setModal]=useState(null),[detail,setDetail]=useState(initialDiscovery),[publicProfile,setPublicProfile]=useState(null),[reports,setReports]=useState([]);
   useEffect(()=>{if(modal!=='login')setEmailSignIn(false)},[modal]);
   const [popularTopics,setPopularTopics]=useState([]);
@@ -88,7 +89,7 @@ export default function Hall({initialDiscovery=null,initialItem=null}) {
     if(version!==loadVersion.current)return;
     if(!error&&view==='Unvoted'&&!data?.length&&page>0){setPage(p=>Math.max(0,p-1));return;}
     if(view==="My discoveries"&&user){const removed=await db.from('submissions').select('id,title,deleted_at').eq('author_id',user.id).not('deleted_at','is',null).order('deleted_at',{ascending:false}).limit(100);if(version!==loadVersion.current)return;setDeletedDiscoveries(removed.data||[])}else setDeletedDiscoveries([]);
-    if(!error&&data?.length){const tags=await db.from('submissions').select('id,tags').in('id',data.map(x=>x.id));if(version!==loadVersion.current)return;setItemTags(Object.fromEntries((tags.data||[]).map(x=>[x.id,x.tags])))}else setItemTags({});
+    if(!error&&data?.length){const tags=await db.from('submissions').select('id,tags').in('id',data.map(x=>x.id));if(version!==loadVersion.current)return;setItemTags(Object.fromEntries((tags.data||[]).map(x=>[x.id,[...new Set((x.tags||[]).map(canonicalTag))]])))}else setItemTags({});
     const levelIds=[...new Set([...(data||[]).map(x=>x.author_id),user?.id,publicProfile].filter(Boolean))];
     if(levelIds.length){const photos=await db.rpc('public_profile_photos',{member_ids:levelIds});if(version!==loadVersion.current)return;if(!photos.error)setAvatars(Object.fromEntries((photos.data||[]).map(x=>[x.user_id,x.image_data])));const levels=await db.rpc('voter_levels',{member_ids:levelIds});if(version!==loadVersion.current)return;if(!levels.error)setVoterLevels(Object.fromEntries((levels.data||[]).map(x=>[x.member_id,x])))}
     setHasMore(!error&&(data?.length||0)>50);
