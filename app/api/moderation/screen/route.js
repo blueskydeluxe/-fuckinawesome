@@ -1,6 +1,6 @@
 import {createClient} from '@supabase/supabase-js';
 import {createHash} from 'node:crypto';
-import {screenImage} from '../../../../lib/content-screening.mjs';
+import {screenImageDetails} from '../../../../lib/content-screening.mjs';
 export const runtime='nodejs';
 export async function POST(request){
  const headers={'Cache-Control':'no-store'};
@@ -30,8 +30,8 @@ export async function POST(request){
  }
  const admin=createClient(url,secret,{auth:{persistSession:false,autoRefreshToken:false}});
  const cached=await admin.from('content_screenings').select('verdict').eq('asset_key',assetKey).maybeSingle();if(cached.data)return reply({verdict:cached.data.verdict});
- const verdict=await screenImage(base64,vision);
- if(verdict==='unavailable')return reply({error:'Screening failed. Content stays pending. Try again later.'},503);
+ const screened=await screenImageDetails(base64,vision);const verdict=screened.verdict;
+ if(verdict==='unavailable'){const messages={BILLING_DISABLED:'Google Vision requires billing to be enabled for this project.',SERVICE_DISABLED:'Enable Cloud Vision API for the key’s Google project.',API_KEY_SERVICE_BLOCKED:'Restrict this key to Cloud Vision API, then save it again.',API_KEY_INVALID:'The Google Vision key is invalid. Check the private Vercel setting.',RATE_LIMIT_EXCEEDED:'Google Vision quota is exhausted. Try later.',PERMISSION_DENIED:'Google rejected access. Check billing, API restrictions, and project permissions.'};return reply({error:(messages[screened.reason]||'Screening is temporarily unavailable.')+' Content stays pending.',reason:screened.reason},503);}
  const stored=await admin.from('content_screenings').upsert({asset_key:assetKey,verdict,reviewer_id:auth.user.id},{onConflict:'asset_key'});
  if(stored.error)return reply({error:'Could not save screening. Content stays pending.'},503);
  return reply({verdict});
