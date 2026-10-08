@@ -147,3 +147,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .gallery-votes svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2}
 .hero h1.swiping-headline{font-size:clamp(38px,6.5vw,76px);letter-spacing:-2px;line-height:1.05}
 @media(max-width:600px){.grid.discovery-grid.small-cards{gap:3px}.discovery-grid.small-cards .card{border-radius:3px}.discovery-grid.small-cards .gallery-votes{font-size:11px;padding:18px 5px 6px}.gallery-votes svg{width:13px;height:13px}}
+
+/* Full-bleed site and gallery. */
+.wrap{max-width:none;width:100%;padding-left:0;padding-right:0}
+.grid.discovery-grid.small-cards{gap:0}
+.discovery-grid.small-cards .card{border-radius:0}
