@@ -26,7 +26,7 @@ function host({reject=false,moderator=false,gate=null}={}){
  const mockReact={...React,useState(initial){const index=cursor++;if(!(index in slots))slots[index]=typeof initial==='function'?initial():initial;return [slots[index],next=>{slots[index]=typeof next==='function'?next(slots[index]):next;dirty=true}]},useRef(initial){const index=cursor++;return slots[index]??(slots[index]={current:initial})},useEffect(effect,deps){const index=cursor++,old=slots[index];if(!old||!deps||deps.some((x,i)=>!Object.is(x,old.deps?.[i]))){effects.push(()=>{old?.cleanup?.();slots[index]={deps,cleanup:effect()}})}}};
  const noop=()=>{},window={addEventListener:noop,removeEventListener:noop,matchMedia:()=>({matches:false})};
  const exports={};vm.runInNewContext(code,{exports,require(name){if(name==='react')return mockReact;if(name.startsWith('react/'))return require(name);if(name.includes('hall-moments'))return moments;if(name.includes('feed-scroll'))return feed;return {__esModule:true,default:({children})=>children,FollowButton:()=>null,LevelBadge:()=>null,configured:true,db,defaultPreferences:{approvals:true,comments:true,rewards:true,measurement:false},canonicalTag:x=>x,sharedDraft:async()=>null,discoveryPhotoUrl:async()=>null,trackUsage:noop}},URLSearchParams,AbortController,window,location:{search:'',pathname:'/',origin:'https://example.com'},history:{replaceState:noop},localStorage:{getItem:()=>null,setItem:noop},document:{activeElement:null,addEventListener:noop,removeEventListener:noop},fetch:async()=>({ok:true,json:async()=>[]}),Image:class{},IntersectionObserver:class{observe(){}disconnect(){}},setTimeout(fn){const id=++timerId;timers.set(id,fn);return id},clearTimeout(id){timers.delete(id)}});
- async function flush(){for(let n=0;n<12;n++){if(dirty){dirty=false;cursor=0;tree=exports.default({});const pending=effects;effects=[];for(const effect of pending)effect()}await Promise.resolve()}return tree}
+ async function flush(){for(let n=0;n<50;n++){if(dirty){dirty=false;cursor=0;tree=exports.default({});const pending=effects;effects=[];for(const effect of pending)effect()}await Promise.resolve()}return tree}
  function all(node=tree){if(!node||typeof node!=='object')return [];return [node,...React.Children.toArray(node.props?.children).flatMap(x=>all(x))]}
  function button(label){return all().find(x=>x.type==='button'&&x.props.children===label)}
  function viewer(){return all().find(x=>x.props?.item&&typeof x.props.onVote==='function')}
@@ -63,4 +63,13 @@ test('moderators have no delete controls on gallery images, but retain the opene
  const h=host({moderator:true});await h.flush();assert.equal(h.button('Delete'),undefined);
  await h.button('Start a five-card round').props.onClick();await h.flush();
  assert.equal(h.viewer().props.moderator,true);assert.equal(typeof h.viewer().props.onDelete,'function');
+});
+test('dismissed vote feedback cannot reappear outside the viewer or dismiss a newer vote',async()=>{
+ const h=host();await h.flush();await h.button('Start a five-card round').props.onClick();await h.flush();
+ await h.viewer().props.onVote('find-0',1);await h.flush();const dismissed=h.viewer().props.moment.sequence;
+ h.viewer().props.onMomentDismiss(dismissed);await h.flush();assert.equal(h.viewer().props.moment,null);
+ await h.advance();await h.viewer().props.onVote('find-1',2);await h.flush();const next=h.viewer().props.moment.sequence;
+ h.viewer().props.onMomentDismiss(dismissed);await h.flush();assert.equal(h.viewer().props.moment.sequence,next);
+ h.viewer().props.onMomentDismiss(next);h.viewer().props.onClose();await h.flush();
+ assert.ok(h.all().filter(x=>x.props?.onDismiss).every(x=>!x.props.moment));
 });
