@@ -6,7 +6,7 @@ export default function useCardSwipe({id,enabled,busy,onVote}){
  current.current={id,enabled,busy,onVote};
  useLayoutEffect(()=>{const node=element.current;if(!node)return;
  let active=true,zoom=null,gesture=null;
- function imageAt(target){const frame=target.closest('.photo-open,.tile-preview,.discovery-dialog-media');return frame?.querySelector('img')}
+ function imageAt(target){const frame=target.closest('.photo-open,.tile-preview,.discovery-dialog-media');return target.closest('img')||frame?.querySelector('[data-current="true"] img')||frame?.querySelector('img')}
  function distance(a,b){return Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY)}
  function drawZoom(){if(!zoom)return;const img=zoom.img;img.style.transform=`translate3d(${zoom.x}px,${zoom.y}px,0) scale(${zoom.scale})`;img.style.transition='none';img.style.transformOrigin='center';img.style.willChange=zoom.scale>1?'transform':'';img.closest('.photo-open,.tile-preview,.discovery-dialog-media')?.classList.toggle('image-zoomed',zoom.scale>1.01)}
  function clearZoom(){if(zoom){zoom.img.style.transform='';zoom.img.style.transformOrigin='';zoom.img.style.willChange='';zoom.img.closest('.photo-open,.tile-preview,.discovery-dialog-media')?.classList.remove('image-zoomed')}zoom=null;gesture=null}
