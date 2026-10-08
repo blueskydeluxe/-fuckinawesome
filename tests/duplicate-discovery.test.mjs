@@ -1,0 +1,7 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {canonicalDiscoveryUrl,discoveryDuplicates} from '../lib/duplicate-discovery.mjs';
+test('tracking and video URL variants share identity',()=>{assert.equal(canonicalDiscoveryUrl('https://www.example.com/device/?utm_source=x#cover'),canonicalDiscoveryUrl('http://example.com/device'));assert.equal(canonicalDiscoveryUrl('https://youtu.be/abc'),canonicalDiscoveryUrl('https://youtube.com/watch?v=abc'));assert.notEqual(canonicalDiscoveryUrl('https://example.com/product?id=1'),canonicalDiscoveryUrl('https://example.com/product?id=2'));});
+test('same model on another domain is flagged, distinct models are not blocked',()=>{const rows=[{id:'1',title:'Roborock Saros Z70',url:'https://brand.com/z70'}];assert.equal(discoveryDuplicates({title:'Roborock Saros Z70 review',url:'https://review.com/robot'},rows)[0].match,'subject');assert.notEqual(discoveryDuplicates({title:'Roborock Saros Z60',url:'https://brand.com/z60'},rows)[0]?.match,'subject');assert.equal(discoveryDuplicates({title:'Dyson robot vacuum',url:''},[{title:'iRobot robot vacuum',url:''}])[0].match,'possible');});
+
+test('separate model numbers match editorial titles while model editions stay separate',()=>{assert.equal(discoveryDuplicates({title:'Jaguar Type 01 review',url:''},[{title:'Jaguar Type 01: bold reinvention or a step too far?',url:''}])[0].match,'subject');assert.notEqual(discoveryDuplicates({title:'Apple iPhone 17 Pro',url:''},[{title:'Apple iPhone 17 Pro Max',url:''}])[0]?.match,'subject');});
