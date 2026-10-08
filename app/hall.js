@@ -58,8 +58,6 @@ export default function Hall({initialDiscovery=null,initialItem=null}) {
   useEffect(()=>{setFollows([]);setPreferences(defaultPreferences);if(!user||!db)return;let active=true;Promise.all([db.from('discovery_follows').select('kind,target').eq('user_id',user.id),db.from('discovery_preferences').select('approvals,comments,rewards,measurement').eq('user_id',user.id).maybeSingle()]).then(([following,prefs])=>{if(!active)return;if(following.error||prefs.error){setMessage('Your following preferences could not load. Try again later.');return}setFollows(following.data||[]);setPreferences(prefs.data||defaultPreferences);if(personalStarted.current!==user.id){personalStarted.current=user.id;if(following.data?.length&&!location.search&&!initialDiscovery)setView('For You')}});return()=>{active=false}},[user?.id]);
   useEffect(()=>{if(user&&new URLSearchParams(location.search).get('my')==='discoveries')setView('My discoveries')},[user?.id]);
   useEffect(()=>{if(!user&&view==='For You')setView('Trending')},[user,view]);
-  useEffect(()=>{if(openedDiscovery?.id)trackUsage('open')},[openedDiscovery?.id]);
-  useEffect(()=>{if(!initialCommentsHandled.current&&detail&&new URLSearchParams(location.search).get('comments')==='1'){const item=items.find(x=>x.id===detail);if(item){initialCommentsHandled.current=true;setOpenedDiscovery({...item,openComments:true})}}},[detail,items]);
   function isFollowing(kind,target){return follows.some(x=>x.kind===kind&&x.target===target)}
   async function follow(kind,target,following){if(!requireUser()||followingBusy)return;setFollowingBusy(true);try{const {error}=await db.rpc('set_discovery_follow',{follow_kind:kind,follow_target:target,following});if(error)throw error;setFollows(rows=>following?[...rows.filter(x=>x.kind!==kind||x.target!==target),{kind,target}]:rows.filter(x=>x.kind!==kind||x.target!==target));setFollowRevision(x=>x+1);setMessage(following?'Following. Find more in For You.':'Unfollowed. Your feed has been updated.')}catch(error){setMessage(error.message||'Could not update following.')}finally{setFollowingBusy(false)}}
   function browseFollow(kind,target){setModal(null);if(kind==='discoverer'){reset();setPublicProfile(target);history.replaceState(null,'','/?profile='+target)}else if(kind==='category')chooseCategory(target);else browseTag(target)}
@@ -81,6 +79,9 @@ export default function Hall({initialDiscovery=null,initialItem=null}) {
   const [lastQueueVote,setLastQueueVote]=useState(null);
   const [notificationRevision,setNotificationRevision]=useState(0);
   const [openedDiscovery,setOpenedDiscovery]=useState(null);
+  useEffect(()=>{if(openedDiscovery?.id)trackUsage('open')},[openedDiscovery?.id]);
+  useEffect(()=>{if(!initialCommentsHandled.current&&detail&&new URLSearchParams(location.search).get('comments')==='1'){const item=items.find(x=>x.id===detail);if(item){initialCommentsHandled.current=true;setOpenedDiscovery({...item,openComments:true})}}},[detail,items]);
+
   const [deletingDiscovery,setDeletingDiscovery]=useState(null),[deletedDiscoveries,setDeletedDiscoveries]=useState([]);
   const [submissionKind,setSubmissionKind]=useState('link'),[photo,setPhoto]=useState(null);
   const uploadedPhoto=useRef(null);
