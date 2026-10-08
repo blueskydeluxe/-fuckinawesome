@@ -11,7 +11,7 @@ import VoteMeters from './vote-meters';
 import useCardSwipe from './use-card-swipe';
 import DiscoveryComments from './discovery-comments';
 import DiscoveryGallery from './discovery-gallery';
-export default function DiscoveryDialog({focusComments,user,moderator,onLogin,queueProgress,onUndo,tags=[],onTag,item,onClose,onPrevious,onNext,hasPrevious,hasNext,position,onVote,onSave,onShare,following,onFollow,followingBusy,vote,saved,busy,message}){
+export default function DiscoveryDialog({focusComments,user,moderator,onDelete,onLogin,queueProgress,onUndo,tags=[],onTag,item,onClose,onPrevious,onNext,hasPrevious,hasNext,position,onVote,onSave,onShare,following,onFollow,followingBusy,vote,saved,busy,message}){
  const dialog=useRef(null),[preview,setPreview]=useState(null),[photo,setPhoto]=useState(null),[playing,setPlaying]=useState(false),[imageFailed,setImageFailed]=useState(false);
  const swipe=useCardSwipe({id:item.id,enabled:!!user&&!vote&&item.status==='approved',busy,onVote});
  useEffect(()=>{setPreview(null);setPhoto(null);setPlaying(false);setImageFailed(false);dialog.current?.scrollTo(0,0)},[item.id]);
@@ -32,6 +32,7 @@ export default function DiscoveryDialog({focusComments,user,moderator,onLogin,qu
   <div className="discovery-dialog-copy"><div className="discoverer-row"><a href={`/?profile=${item.author_id}`}>Found by {item.author_name||'a discoverer'}</a>{item.author_id!==user?.id&&<FollowButton kind="discoverer" target={item.author_id} following={following} onFollow={onFollow} busy={followingBusy} label="discoverer"/>}</div><DiscoveryShare key={item.id} item={item} onShare={onShare}/><div className="tag">{item.category}</div><div className="discovery-tags viewer-tags">{tags.map(tag=><button key={tag} onClick={()=>onTag(tag)}>#{tag}</button>)}</div>{preview?.description&&preview.description!==item.description&&<><h3>From the linked page</h3><p>{preview.description}</p></>}{item.description&&<><h3>About this discovery</h3><p><SourceText text={item.description}/></p></>}{source&&<><a className="button-link primary" href={source} target="_blank" rel="noopener noreferrer">Visit full site ↗</a>{preview?.video&&!preview?.embed&&<p className="muted">This source doesn’t support playback here. Watch on the full site.</p>}{playing&&<p className="muted">If the creator restricts playback, use Visit full site to watch.</p>}</>}<button className="dialog-back" onClick={onClose}>Back to the hall</button></div>
   </div>
   {item.status==='approved'&&<DiscoveryComments focusComments={focusComments} key={item.id} item={item} user={user} moderator={moderator} onLogin={onLogin}/>}
+ {moderator&&<div className="moderator-viewer-delete"><button disabled={busy} onClick={onDelete}>Delete submission</button></div>}
  </dialog>;
 }
 
