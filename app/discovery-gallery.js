@@ -41,6 +41,7 @@ export default function DiscoveryGallery({id,title,cover,embed,loading,source}){
    .gallery-dots span.is-current{background:#ff8b32;transform:scale(1.2)}
    .discovery-dialog-media[data-no-swipe]{touch-action:pan-x pan-y}
    .gallery-track{position:relative;display:flex;width:100%;height:clamp(220px,50dvh,600px);overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y;cursor:grab}
+   @media(max-width:600px){.gallery-track{height:clamp(260px,58dvh,640px)}}
    .gallery-track::-webkit-scrollbar{display:none}.gallery-track[data-dragging]{cursor:grabbing;user-select:none}
    .gallery-slide{position:relative;flex:0 0 100%;width:100%;height:100%;min-width:0;scroll-snap-align:start;scroll-snap-stop:always}
    .gallery-slide img{display:block;width:100%;height:100%;max-height:none;object-fit:contain;-webkit-user-drag:none}
