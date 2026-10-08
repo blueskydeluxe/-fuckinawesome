@@ -1,4 +1,5 @@
 'use client';
+import VoteMoment from './vote-moment';
 import {FollowButton} from './following';
 import DiscoveryShare from './discovery-share';
 import VoterProgress from './voter-progress';
@@ -11,7 +12,7 @@ import VoteMeters from './vote-meters';
 import useCardSwipe from './use-card-swipe';
 import DiscoveryComments from './discovery-comments';
 import DiscoveryGallery from './discovery-gallery';
-export default function DiscoveryDialog({focusComments,user,moderator,onDelete,onLogin,queueProgress,onUndo,tags=[],onTag,item,onClose,onPrevious,onNext,hasPrevious,hasNext,position,onVote,onSave,onShare,following,onFollow,followingBusy,vote,saved,busy,message}){
+export default function DiscoveryDialog({moment,onMomentOpen,roundProgress,focusComments,user,moderator,onDelete,onLogin,queueProgress,onUndo,tags=[],onTag,item,onClose,onPrevious,onNext,hasPrevious,hasNext,position,onVote,onSave,onShare,following,onFollow,followingBusy,vote,saved,busy,message}){
  const dialog=useRef(null),[preview,setPreview]=useState(null),[photo,setPhoto]=useState(null),[playing,setPlaying]=useState(false),[imageFailed,setImageFailed]=useState(false);
  const swipe=useCardSwipe({id:item.id,enabled:!!user&&!vote&&item.status==='approved',busy,onVote});
  useEffect(()=>{setPreview(null);setPhoto(null);setPlaying(false);setImageFailed(false);dialog.current?.scrollTo(0,0)},[item.id]);
@@ -21,7 +22,9 @@ export default function DiscoveryDialog({focusComments,user,moderator,onDelete,o
  const image=item.image_path?photo:preview?.available?`/api/preview/${item.id}?image=1`:null;
  const source=safeLink(item.url);
  return <dialog ref={dialog} className="discovery-dialog" aria-labelledby="discovery-dialog-title" onClose={onClose} onClick={e=>{if(e.target===dialog.current){const r=dialog.current.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)onClose()}}}>
+  <VoteMoment moment={moment} onOpen={onMomentOpen}/>
   <div className="viewer-navigation"><button autoFocus className="close" aria-label="Close discovery" onClick={onClose}>×</button><button disabled={!hasPrevious||busy} onClick={onPrevious} aria-label="Previous discovery">← Previous</button><span aria-live="polite">{position}</span><button disabled={!hasNext||busy} onClick={onNext} aria-label="Next discovery">Next →</button></div>
+  {roundProgress&&<div className="round-progress"><span>{roundProgress.done} of {roundProgress.total} verdicts counted</span><progress value={roundProgress.done} max={roundProgress.total} aria-label="Five-card round progress"/><small>Awesome, Meh or Bullshit. Every verdict counts.</small></div>}
   {queueProgress&&<div className="swipe-help">← It’s Bullshit · Swipe to vote · Fuckin Awesome →</div>}
   {onUndo&&<button className="swipe-undo" disabled={busy} onClick={onUndo}>↶ Undo last vote</button>}
   <div className={swipe.className} ref={swipe.ref} {...swipe.handlers}>
