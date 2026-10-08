@@ -161,3 +161,5 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 @keyframes moment-arrive{from{opacity:0;translate:0 8px}to{opacity:1;translate:0 0}}
 @media(max-width:700px){.five-card-invite{align-items:stretch;flex-direction:column;padding:16px}.race-to-hall{padding:16px}.race-contenders{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.race-contender .discovery-image{height:140px}.race-contender>div:last-child{padding:10px}.race-contender strong{font-size:.85rem}.round-picks{grid-template-columns:1fr}.vote-moment{bottom:max(10px,env(safe-area-inset-bottom));padding:14px 48px 14px 14px}}
 @media(prefers-reduced-motion:reduce){.vote-moment{animation:none}.meter-fill{transition:none}}
+
+.counted-total{display:inline-block;font-weight:800;font-variant-numeric:tabular-nums;animation:counted-total-pop 260ms ease-out}@keyframes counted-total-pop{0%{transform:scale(1.18);opacity:.5}100%{transform:scale(1);opacity:1}}@media(prefers-reduced-motion:reduce){.counted-total{animation:none}}
