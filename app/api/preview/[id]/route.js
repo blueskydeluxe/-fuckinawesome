@@ -1,5 +1,6 @@
 import {createClient} from '@supabase/supabase-js';
 import {linkPreview,linkGallery,readPublic} from '../../../../lib/link-preview.mjs';
+import {reviewedGallery} from '../../../../lib/discovery-media-review.mjs';
 import {screenImage} from '../../../../lib/content-screening.mjs';
 import sharp from 'sharp';
 import {createHash} from 'node:crypto';
@@ -28,7 +29,7 @@ export async function GET(request,{params}){
  if(error||!data?.url)return new Response(null,{status:404,headers});
  const query=new URL(request.url).searchParams;
  if(query.has('gallery')){
-  const gallery=await linkGallery(data.url);
+  const gallery=reviewedGallery(id,data.url)??await linkGallery(data.url);
   if(!query.has('index'))return Response.json({images:gallery.map((x,index)=>({src:`/api/preview/${id}?gallery=1&index=${index}&v=${imageVersion(x.url)}`,alt:x.alt,source:x.source}))},{headers});
   const raw=query.get('index');if(!/^\d{1,2}$/.test(raw)||!gallery[Number(raw)])return new Response(null,{status:404,headers});
   if(query.has('v')&&query.get('v')!==imageVersion(gallery[Number(raw)].url))return new Response(null,{status:404,headers});
