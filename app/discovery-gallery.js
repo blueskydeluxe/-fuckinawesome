@@ -1,17 +1,18 @@
 'use client';
 import {useEffect,useLayoutEffect,useState,useRef} from 'react';
 import {galleryPosition,galleryRelease} from '../lib/gallery-motion.mjs';
+import {previewJSON} from '../lib/request-deadline.mjs';
 export default function DiscoveryGallery({id,title,cover,embed,loading,source}){
  const [images,setImages]=useState([]),[selected,setSelected]=useState('cover'),[playing,setPlaying]=useState(false),[coverFailed,setCoverFailed]=useState(false);
  const track=useRef(null),mouse=useRef(null),scrolling=useRef(false),settleTimer=useRef(null);
- useEffect(()=>{if(!source)return;let active=true;const controller=new AbortController(),pending=new Set();
-  fetch(`/api/preview/${id}?gallery=1`,{signal:controller.signal}).then(r=>r.ok?r.json():{images:[]}).then(async data=>{
+ useEffect(()=>{if(!source)return;let active=true;const controller=new AbortController(),pending=new Map();
+  previewJSON(`/api/preview/${id}?gallery=1`,{signal:controller.signal}).then(async data=>{
    const entries=Array.isArray(data.images)?data.images.slice(0,24):[];let cursor=0;
    async function worker(){while(active&&cursor<entries.length){const index=cursor++,entry=entries[index];if(!entry.src?.startsWith(`/api/preview/${id}?gallery=1&index=`))continue;
-    await new Promise(resolve=>{const img=new Image();pending.add(img);img.onload=()=>{pending.delete(img);if(active)setImages(old=>[...old,{...entry,index}]);resolve()};img.onerror=()=>{pending.delete(img);resolve()};img.src=entry.src});
+    await new Promise(resolve=>{const img=new Image();let done=false;const finish=loaded=>{if(done)return;done=true;clearTimeout(timer);pending.delete(img);img.onload=null;img.onerror=null;if(loaded&&active)setImages(old=>[...old,{...entry,index}].sort((a,b)=>a.index-b.index));if(!loaded)img.src='';resolve()};const timer=setTimeout(()=>finish(false),6000);pending.set(img,()=>finish(false));img.onload=()=>finish(true);img.onerror=()=>finish(false);img.src=entry.src});
    }}await Promise.all([worker(),worker(),worker()]);
   }).catch(()=>{});
-  return()=>{active=false;controller.abort();for(const img of pending){img.onload=null;img.onerror=null;img.src=''}};
+  return()=>{active=false;controller.abort();for(const cancel of pending.values())cancel()};
  },[id,source]);
  const slides=[...(cover&&!coverFailed?[{key:'cover',src:cover,alt:title,source:null}]:[]),...images.map(x=>({...x,key:String(x.index)}))];
  const position=Math.max(0,slides.findIndex(x=>x.key===selected)),slide=slides[position];
