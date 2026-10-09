@@ -171,7 +171,15 @@ export default function Hall({initialDiscovery=null,initialItem=null}) {
       setLastQueueVote({id,previous,item:updated,inViewer});const next=items.slice(items.findIndex(x=>x.id===id)+1).find(x=>!votes[x.id])||items.find(x=>x.id!==id&&!votes[x.id]);setItems(list=>list.filter(x=>x.id!==id));setMessage('');
       if(inViewer)setOpenedDiscovery(next||null);
       if(!next){const refreshed=await load({background:true});if(inViewer)setOpenedDiscovery(refreshed?.[0]||null)}
-    }else if(['Hall of Fame','Hall of Bullshit'].includes(view))await load({background:true});
+    }else {
+      if(inViewer&&nextValue){
+        const candidates=visible.filter(x=>x.id!==id&&!votes[x.id]&&x.status==='approved');
+        const position=visible.findIndex(x=>x.id===id);
+        const next=candidates.find(x=>visible.indexOf(x)>position)||candidates[0];
+        setOpenedDiscovery(current=>current?.id===id?next||null:current);
+      }
+      if(['Hall of Fame','Hall of Bullshit'].includes(view))await load({background:true});
+    }
   })}
   async function undoRoundVote(){if(!round?.results.length||!requireUser())return;clearTimeout(roundNext.current);const last=round.results.at(-1);await act(async()=>{
     const response=await db.rpc('cast_vote_with_result',{discovery_id:last.id,vote_value:0});if(response.error)throw response.error;
