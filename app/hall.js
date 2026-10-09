@@ -6,6 +6,7 @@ import VotingRound from './voting-round';
 import {countedVote,voteMoment} from '../lib/hall-moments.mjs';
 import {discoveryPhotoUrl} from '../lib/discovery-photo-url';
 import {readFeedBatch,mergeDiscoveries} from '../lib/feed-scroll.mjs';
+import {withDeadline} from '../lib/request-deadline.mjs';
 import Following,{FollowButton} from './following';
 import DiscoveryPreferences,{defaultPreferences} from './discovery-preferences';
 import UsageMeasurement from './usage-measurement';
@@ -115,16 +116,19 @@ export default function Hall({initialDiscovery=null,initialItem=null}) {
     const version=++loadVersion.current;
     feedRequest.current=true;setFeedError(false);
     setLoadingMore(append);if(!append&&!background)setLoading(true);
-    const {data,error,more}=await readFeedBatch(offset=>db.rpc(view==='For You'?'personal_discovery_feed':'search_discovery_feed',{...(view==='For You'?{}:{feed:view}),selected_category:category,member_id:publicProfile,discovery_id:detail,page_offset:offset,selected_tag:selectedTag,search_query:searchQuery||null}),{offset:append?items.length:0,count:background&&!append?Math.max(50,items.length):50});
+    let batch;try{batch=await withDeadline(()=>readFeedBatch(offset=>db.rpc(view==='For You'?'personal_discovery_feed':'search_discovery_feed',{...(view==='For You'?{}:{feed:view}),selected_category:category,member_id:publicProfile,discovery_id:detail,page_offset:offset,selected_tag:selectedTag,search_query:searchQuery||null}),{offset:append?items.length:0,count:background&&!append?Math.max(50,items.length):50}),10000)}catch(error){batch={data:[],error,more:false}}
+    const {data,error,more}=batch;
     if(version!==loadVersion.current)return;
+    if(!error){setHasMore(more);setItems(old=>append?mergeDiscoveries(old,data):data)}else{setFeedError(true);setMessage('Could not load discoveries. Please try again.')}
+    setLoading(false);setLoadingMore(false);feedRequest.current=false;
+    // Enrichment is optional; it must not delay the next card or keep voting busy.
+    void (async()=>{
     if(view==="My discoveries"&&user){const removed=await db.from('submissions').select('id,title,deleted_at').eq('author_id',user.id).not('deleted_at','is',null).order('deleted_at',{ascending:false}).limit(100);if(version!==loadVersion.current)return;setDeletedDiscoveries(removed.data||[])}else setDeletedDiscoveries([]);
     if(!error&&data?.length){const tags=await db.from('submissions').select('id,tags').in('id',data.map(x=>x.id));if(version!==loadVersion.current)return;setItemTags(old=>({... (append?old:{}),...Object.fromEntries((tags.data||[]).map(x=>[x.id,[...new Set((x.tags||[]).map(canonicalTag))]]))}))}else if(!append)setItemTags({});
     if(view==='My discoveries'&&data?.length){const states=await db.rpc('own_discovery_statuses',{discovery_ids:data.map(x=>x.id)});if(version!==loadVersion.current)return;if(!states.error)setScreenings(old=>({... (append?old:{}),...Object.fromEntries((states.data||[]).map(x=>[x.id,x.screening]))}))}
     const levelIds=[...new Set([...(data||[]).map(x=>x.author_id),user?.id,publicProfile].filter(Boolean))];
     if(levelIds.length){const photos=await db.rpc('public_profile_photos',{member_ids:levelIds});if(version!==loadVersion.current)return;if(!photos.error)setAvatars(old=>({...old,...Object.fromEntries((photos.data||[]).map(x=>[x.user_id,x.image_data]))}));const levels=await db.rpc('voter_levels',{member_ids:levelIds});if(version!==loadVersion.current)return;if(!levels.error)setVoterLevels(old=>({...old,...Object.fromEntries((levels.data||[]).map(x=>[x.member_id,x]))}))}
-    if(!error)setHasMore(more);
-    if(error){setFeedError(true);setMessage('Could not load discoveries. Please try again.');}else setItems(old=>append?mergeDiscoveries(old,data):data);
-    setLoading(false);setLoadingMore(false);feedRequest.current=false;
+    })().catch(()=>{});
     return error?null:data;
   }
   useEffect(()=>{ if(!db)return; let active=true; db.auth.getUser().then(({data})=>{if(active)setUser(data.user)}); const {data}=db.auth.onAuthStateChange((_event,session)=>setUser(session?.user||null)); const params=new URLSearchParams(location.search); setDetail(params.get('discovery')||initialDiscovery); setPublicProfile(params.get('profile')); return ()=>{active=false;data.subscription.unsubscribe()}; },[]);
