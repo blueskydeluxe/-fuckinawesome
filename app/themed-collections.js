@@ -4,12 +4,14 @@ import {db} from '../lib/supabase';
 import {withDeadline} from '../lib/request-deadline.mjs';
 import {eligibleCollectionRows} from '../lib/themed-collections.mjs';
 import {cardImageUrl} from '../lib/card-image.mjs';
-export function CollectionTile({collection,onOpen}){
- const [rows,setRows]=useState([]);
- useEffect(()=>{setRows([]);if(!collection||!db)return;let active=true;withDeadline(()=>db.from('discoveries').select('*').in('id',collection.ids).eq('status','approved'),8000).then(({data,error})=>{if(active&&!error)setRows(eligibleCollectionRows(collection,data||[]))}).catch(()=>{});return()=>{active=false}},[collection?.slug]);
- if(rows.length<3)return null;
- return <article className="collection-tile"><button onClick={()=>onOpen({...collection,rows})} aria-label={'Try collection: '+collection.title}><span className="collection-collage" aria-hidden="true">{rows.slice(0,3).map(x=><img key={x.id} src={cardImageUrl(x.id,320)} alt="" loading="lazy" onError={()=>setRows(current=>current.filter(row=>row.id!==x.id))}/>)}</span><span className="collection-tile-copy"><small>TRY A COLLECTION</small><strong>{collection.title}</strong><span>Judge these {rows.length} →</span></span></button></article>;
+export function CollectionTile({collection,onOpen,userId,votes={}}){
+ const [rows,setRows]=useState([]),[cast,setCast]=useState({});
+ useEffect(()=>{setRows([]);setCast({});if(!collection||!db)return;let active=true;withDeadline(()=>Promise.all([db.from('discoveries').select('*').in('id',collection.ids).eq('status','approved'),userId?db.from('votes').select('submission_id,value').eq('user_id',userId).in('submission_id',collection.ids):Promise.resolve({data:[]})]),8000).then(([finds,judged])=>{if(active&&!finds.error&&!judged.error){setRows(finds.data||[]);setCast(Object.fromEntries((judged.data||[]).map(x=>[x.submission_id,x.value])))}}).catch(()=>{});return()=>{active=false}},[collection?.slug,userId]);
+ const fresh=eligibleCollectionRows(collection,rows,{...cast,...votes});
+ if(fresh.length<3)return null;
+ return <article className="collection-tile"><button onClick={()=>onOpen({...collection,rows:fresh})} aria-label={'Try collection: '+collection.title}><span className="collection-collage" aria-hidden="true">{fresh.slice(0,3).map(x=><img key={x.id} src={cardImageUrl(x.id,320)} alt="" loading="lazy" onError={()=>setRows(current=>current.filter(row=>row.id!==x.id))}/>)}</span><span className="collection-tile-copy"><small>NEW VERDICTS TO MAKE</small><strong>{collection.title}</strong><span>Judge these {fresh.length} →</span></span></button></article>;
 }
+
 export function CollectionPreview({collection,busy,message,onOpen,onStart,onClose,onShare}){
  const dialog=useRef(null);
  useEffect(()=>{const previous=document.activeElement;dialog.current.showModal();const overflow=document.body.style.overflow;document.body.style.overflow='hidden';return()=>{document.body.style.overflow=overflow;previous?.focus()}},[]);
