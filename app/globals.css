@@ -197,3 +197,20 @@ header .voter-progress{padding:4px 0 0}header .voter-progress small{display:none
 
 /* Compact icons, with comfortable touch targets. */
 .viewer-engagement>.viewer-card-actions{justify-content:center;gap:12px;margin-top:6px}.viewer-engagement>.viewer-card-actions button,.viewer-engagement>.viewer-card-actions .share-link-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 44px;width:44px;min-width:44px;height:44px;min-height:44px;padding:12px;background:transparent;border:0;color:#e1e5eb}.viewer-engagement>.viewer-card-actions button svg{width:18px;height:18px}.viewer-engagement>.viewer-card-actions button:hover:not(:disabled){background:#ffffff0a;color:#ff963f}.viewer-engagement>.viewer-card-actions button[aria-pressed="true"]{color:#ff963f}.viewer-engagement>.viewer-card-actions button:disabled{opacity:.3}
+
+/* Connected Spectrum: the three verdicts form the primary, edge-to-edge action. */
+.discovery-dialog .viewer-engagement{--vote-inset:30px}
+.discovery-dialog .viewer-engagement .voting{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;width:calc(100% + var(--vote-inset)*2);margin:16px calc(-1 * var(--vote-inset)) 0}
+.discovery-dialog .viewer-engagement .voting button{height:76px;min-height:76px;margin:0;padding:8px 3px;border:0;color:#fff;text-align:center;transform:none;box-shadow:none;touch-action:manipulation;transition:filter 120ms ease,box-shadow 120ms ease}
+.discovery-dialog .viewer-engagement .voting button:first-child{grid-column:3;grid-row:1;background:#e3342c}
+.discovery-dialog .viewer-engagement .voting .meh-vote{grid-column:2;grid-row:1;background:#333a45}
+.discovery-dialog .viewer-engagement .voting button:last-child{grid-column:1;grid-row:1;background:#657139}
+.discovery-dialog .viewer-engagement .voting .vote-desktop-label{display:none}
+.discovery-dialog .viewer-engagement .voting .vote-mobile-label{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:13px;line-height:1.2;font-weight:700}
+.discovery-dialog .viewer-engagement .voting .vote-symbol{display:block;font-size:28px;line-height:1;font-weight:800}
+.discovery-dialog .viewer-engagement .voting button:hover:not(:disabled){filter:brightness(1.12)}
+.discovery-dialog .viewer-engagement .voting button:active:not(:disabled){filter:brightness(1.15);box-shadow:inset 0 0 0 3px #ffffffb0}
+.discovery-dialog .viewer-engagement .voting button:focus-visible{outline-offset:-4px;outline-color:#fff;z-index:1}
+@media(max-width:700px){.discovery-dialog .viewer-engagement{--vote-inset:18px}}
+@media(max-width:600px){.discovery-dialog .viewer-engagement{--vote-inset:16px}}
+@media(prefers-reduced-motion:reduce){.discovery-dialog .viewer-engagement .voting button{transition:none}}
