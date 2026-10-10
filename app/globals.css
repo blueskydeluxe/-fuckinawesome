@@ -192,3 +192,5 @@ header .voter-progress{padding:4px 0 0}header .voter-progress small{display:none
 .discovery-dialog .viewer-close-control .close{position:absolute;top:10px;right:10px;width:48px;height:48px;padding:0;font-size:28px;line-height:1;background:#080b10;color:#fff;border:1px solid #ffffff50;transform:none}
 .discovery-dialog .viewer-title{padding:18px 74px 18px 20px;min-height:68px}
 @media(max-width:600px){.discovery-dialog .viewer-title{padding:16px 70px 16px 16px}.discovery-dialog .viewer-engagement{padding:14px 16px}}
+
+.viewer-engagement>.viewer-card-actions{display:flex;flex-wrap:nowrap;align-items:center;gap:8px;margin-top:10px}.viewer-card-actions button{min-height:44px;white-space:nowrap}.viewer-card-actions .share-link-icon{display:inline-flex;align-items:center;justify-content:center;width:44px;min-width:44px;padding:10px}.viewer-card-actions .share-link-icon svg{width:20px;height:20px}
