@@ -15,7 +15,7 @@ function harness(){
  const source=readFileSync(new URL('../app/use-card-swipe.js',import.meta.url),'utf8').replace(/^import .*$/gm,'').replace('export default function','function')+'\nuseCardSwipe';
  const hook=vm.runInNewContext(source,context);let props,result;
  function render(next=props){props=next;do{dirty=false;cursor=0;result=hook(props);let tasks=pending.splice(0);for(const f of tasks)f()}while(dirty);return result}
- function event(type,x){const finger={identifier:1,clientX:x,clientY:100},e={type,target:{closest:()=>null},touches:type==='touchend'?[]:[finger],changedTouches:[finger],timeStamp:type==='touchstart'?0:type==='touchmove'?40:50,cancelable:true,preventDefault(){}};node.listeners[type](e);for(const f of frames.values())f();frames.clear();render();}
+ function event(type,x,y=100){const finger={identifier:1,clientX:x,clientY:y},e={type,target:{closest:()=>null},touches:type==='touchend'?[]:[finger],changedTouches:[finger],timeStamp:type==='touchstart'?0:type==='touchmove'?40:50,cancelable:true,preventDefault(){}};node.listeners[type](e);for(const f of frames.values())f();frames.clear();render();}
  function touchEvent(type,touches,target){node.listeners[type]({type,touches,target,changedTouches:[],cancelable:true,preventDefault(){}});render()}
  return {node,render,event,touchEvent,get result(){return result},runTimer(){const [id,fn]=timers.entries().next().value;timers.delete(id);return fn()}};
 }
@@ -61,4 +61,17 @@ test('a canceled pinch resets even when a finger remains',()=>{
  const a={clientX:0,clientY:0},b={clientX:100,clientY:0};
  h.touchEvent('touchstart',[a,b],img);h.touchEvent('touchmove',[a,{...b,clientX:200}],img);
  h.touchEvent('touchcancel',[a],img);assert.equal(img.style.transform,'');
+});
+
+test('diagonal scrolling never grabs or votes, even if the finger drifts sideways later',()=>{
+ const h=harness();h.render({id:'first',enabled:true,busy:false,onVote:()=>assert.fail('scroll must not vote')});
+ h.event('touchstart',100,100);h.event('touchmove',112,106);assert.equal(h.node.style.transform,'');
+ h.event('touchmove',120,130);assert.equal(h.result.drag,0);assert.equal(h.result.className.includes('is-held'),false);
+ h.event('touchmove',240,160);h.event('touchend',250,170);assert.equal(h.result.drag,0);
+});
+test('a tentative horizontal drag yields when the user turns vertically',()=>{
+ const h=harness();h.render({id:'first',enabled:true,busy:false,onVote:()=>assert.fail('scroll must not vote')});
+ h.event('touchstart',100,100);h.event('touchmove',120,101);assert.equal(h.result.drag,1);
+ h.event('touchmove',130,160);assert.equal(h.result.drag,0);assert.equal(h.node.style.transform,'');
+ h.event('touchend',140,190);assert.equal(h.result.drag,0);
 });
