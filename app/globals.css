@@ -194,3 +194,6 @@ header .voter-progress{padding:4px 0 0}header .voter-progress small{display:none
 @media(max-width:600px){.discovery-dialog .viewer-title{padding:16px 70px 16px 16px}.discovery-dialog .viewer-engagement{padding:14px 16px}}
 
 .viewer-engagement>.viewer-card-actions{display:flex;flex-wrap:nowrap;align-items:center;gap:8px;margin-top:10px}.viewer-card-actions button{min-height:44px;white-space:nowrap}.viewer-card-actions .share-link-icon{display:inline-flex;align-items:center;justify-content:center;width:44px;min-width:44px;padding:10px}.viewer-card-actions .share-link-icon svg{width:20px;height:20px}
+
+/* Compact icons, with comfortable touch targets. */
+.viewer-engagement>.viewer-card-actions{justify-content:center;gap:12px;margin-top:6px}.viewer-engagement>.viewer-card-actions button,.viewer-engagement>.viewer-card-actions .share-link-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 44px;width:44px;min-width:44px;height:44px;min-height:44px;padding:12px;background:transparent;border:0;color:#e1e5eb}.viewer-engagement>.viewer-card-actions button svg{width:18px;height:18px}.viewer-engagement>.viewer-card-actions button:hover:not(:disabled){background:#ffffff0a;color:#ff963f}.viewer-engagement>.viewer-card-actions button[aria-pressed="true"]{color:#ff963f}.viewer-engagement>.viewer-card-actions button:disabled{opacity:.3}
