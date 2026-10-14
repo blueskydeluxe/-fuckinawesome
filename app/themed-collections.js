@@ -2,14 +2,20 @@
 import {useEffect,useRef,useState} from 'react';
 import {db} from '../lib/supabase';
 import {withDeadline} from '../lib/request-deadline.mjs';
-import {eligibleCollectionRows} from '../lib/themed-collections.mjs';
+import {eligibleCollectionRows,dailyCollectionRows,surpriseCollection} from '../lib/themed-collections.mjs';
 import {cardImageUrl} from '../lib/card-image.mjs';
+export function SurpriseCollection({userId,votes={},onOpen}){
+ const [rows,setRows]=useState([]);
+ useEffect(()=>{if(!db)return;let active=true;withDeadline(()=>db.rpc('search_discovery_feed',{feed:'Unvoted',selected_category:'All',member_id:null,discovery_id:null,page_offset:0,selected_tag:null,search_query:null}),8000).then(({data,error})=>{if(active&&!error)setRows(data||[])}).catch(()=>{});return()=>{active=false}},[userId]);
+ const fresh=dailyCollectionRows(rows,votes);if(fresh.length<3)return null;
+ return <CollectionTile collection={{...surpriseCollection,ids:fresh.map(x=>x.id)}} userId={userId} votes={votes} onOpen={onOpen}/>;
+}
 export function CollectionTile({collection,onOpen,userId,votes={}}){
  const [rows,setRows]=useState([]),[cast,setCast]=useState({});
  useEffect(()=>{setRows([]);setCast({});if(!collection||!db)return;let active=true;withDeadline(()=>Promise.all([db.from('discoveries').select('*').in('id',collection.ids).eq('status','approved'),userId?db.from('votes').select('submission_id,value').eq('user_id',userId).in('submission_id',collection.ids):Promise.resolve({data:[]})]),8000).then(([finds,judged])=>{if(active&&!finds.error&&!judged.error){setRows(finds.data||[]);setCast(Object.fromEntries((judged.data||[]).map(x=>[x.submission_id,x.value])))}}).catch(()=>{});return()=>{active=false}},[collection?.slug,userId]);
  const fresh=eligibleCollectionRows(collection,rows,{...cast,...votes});
  if(fresh.length<3)return null;
- return <article className="collection-tile"><button onClick={()=>onOpen({...collection,rows:fresh})} aria-label={'Try collection: '+collection.title}><span className="collection-collage" aria-hidden="true">{fresh.slice(0,3).map(x=><img key={x.id} src={cardImageUrl(x.id,320)} alt="" loading="lazy" onError={()=>setRows(current=>current.filter(row=>row.id!==x.id))}/>)}</span><span className="collection-tile-copy"><small>NEW VERDICTS TO MAKE</small><strong>{collection.title}</strong><span>Judge these {fresh.length} →</span></span></button></article>;
+ return <article className="collection-tile"><button onClick={()=>onOpen({...collection,rows:fresh})} aria-label={'Try collection: '+collection.title}><span className="collection-collage" aria-hidden="true">{fresh.slice(0,3).map(x=><img key={x.id} src={cardImageUrl(x.id,320)} alt="" loading="lazy" onError={()=>setRows(current=>current.filter(row=>row.id!==x.id))}/>)}</span><span className="collection-tile-copy"><small>{collection.slug==='surprise-me'?'TODAY’S SURPRISE MIX':'NEW VERDICTS TO MAKE'}</small><strong>{collection.title}</strong><span>Judge these {fresh.length} →</span></span></button></article>;
 }
 
 export function CollectionPreview({collection,busy,message,onOpen,onStart,onClose,onShare}){
