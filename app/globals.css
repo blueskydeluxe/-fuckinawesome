@@ -339,3 +339,6 @@ footer .phone-sharing-controls button{background:transparent;border:0;text-decor
 .reveal-preference{display:flex;align-items:center;gap:8px;min-height:44px;margin:0 0 8px;font-size:12px;color:#384557;cursor:pointer}.reveal-preference input{width:18px;height:18px;margin:0;flex:0 0 18px;accent-color:#d3610a}
 .verdict-hidden{display:flex;flex-direction:column;gap:5px;padding:14px;background:#fff3e8;border:1px solid #e1b997;color:#384557;font-size:13px}.verdict-hidden strong{color:#171b22}.verdict-reveal{padding:8px 12px;background:#fff3e8;color:#8c3700!important;font-weight:700;font-size:13px;animation:moment-arrive 180ms ease-out}
 @media(prefers-reduced-motion:reduce){.verdict-reveal{animation:none}}
+
+/* Gallery component styles must follow the shared light surfaces. */
+.discovery-dialog .gallery-dots,.discovery-dialog .gallery-credit{background:#fff!important;color:#525d6b!important}
