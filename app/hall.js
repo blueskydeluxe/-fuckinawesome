@@ -162,11 +162,11 @@ export default function Hall({initialDiscovery=null,initialItem=null}) {
     if(nextValue)setMoment({...voteMoment(item,result,nextValue),item:updated,sequence:++momentSequence.current});
     setMomentRevision(x=>x+1);setNotificationRevision(x=>x+1);
     db.rpc('voter_levels',{member_ids:[user.id]}).then(levels=>{if(activeUser.current===user.id&&!levels.error)setVoterLevels(old=>({...old,...Object.fromEntries((levels.data||[]).map(x=>[x.member_id,x]))}))}).catch(()=>{});
-    if(inViewer&&nextValue){await new Promise(resolve=>setTimeout(resolve,1100));inViewer=openedCardRef.current?.id===id;if(activeUser.current!==user.id)return;}
+    inViewer=inViewer&&openedCardRef.current?.id===id;
     if(roundState.current?.phase==='voting'&&round.rows[round.index]?.id===id&&nextValue){
       const nextRound={...round,results:[...round.results,updated],index:round.index+1};
       setRound({...nextRound,phase:'advancing'});setMessage('');
-      roundNext.current=setTimeout(()=>{if(nextRound.index>=nextRound.rows.length){setOpenedDiscovery(null);setRound({...nextRound,phase:'recap'})}else{setOpenedDiscovery(nextRound.rows[nextRound.index]);setRound({...nextRound,phase:'voting'})}},window.matchMedia('(prefers-reduced-motion: reduce)').matches?0:420);
+      roundNext.current=setTimeout(()=>{if(nextRound.index>=nextRound.rows.length){setOpenedDiscovery(null);setRound({...nextRound,phase:'recap'})}else{setOpenedDiscovery(nextRound.rows[nextRound.index]);setRound({...nextRound,phase:'voting'})}},0);
       return;
     }
     if(round){setRound(current=>current?{...current,results:[...current.results,updated]}:current);return;}
