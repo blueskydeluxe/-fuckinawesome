@@ -270,3 +270,54 @@ footer{color:var(--light-muted);background:#f6f7f9}
 .hero{background:#fff}.hero-art{display:none}.hero:before,.hero:after{display:none}
 .hero h1.swiping-headline{font-size:clamp(46px,7vw,88px);line-height:1;letter-spacing:-1px;margin:0 auto 14px}
 @media(max-width:700px){.hero h1.swiping-headline{font-size:clamp(38px,11.8vw,58px);line-height:1.02;letter-spacing:-.5px}}
+
+/* Complete light-theme surfaces and neutral secondary actions. */
+:root{--paper:#171b22;--violet:#5942a3}
+button,.button-link,.secondary{background:#edf0f4;color:#273342;border-color:#bbc4cf;box-shadow:none}
+button:hover:not(:disabled),.button-link:hover,.secondary:hover{background:#dfe5ec;color:#171b22;border-color:#8d9aab;transform:none}
+button:active:not(:disabled){background:#d1d9e3}
+button[aria-pressed=true]{background:#e0e6ed;color:#171b22;border-color:#a3afbf}
+.primary,.submission-cta,.header-submit,.hero .submission-cta{background:var(--orange);color:#171b22;border-color:var(--orange);box-shadow:none}
+.primary:hover,.submission-cta:hover,.header-submit:hover,.hero .submission-cta:hover{background:#ff9c4d;color:#171b22;border-color:#f58220;transform:none}
+.weekly-board,.shared-draft,.rewards,.cover-picker,.category-requests,.notifications,.badge,.badge.earned,.leaderboard-start{background:#f5f7fa;color:#171b22;border-color:#d1d7df;box-shadow:none}
+.leaderboard-start{background:#fff;border:1px solid #d1d7df}
+.weekly-board li,.notifications li,.social-sign-in details,.signin-loading,.email-sign-in-form,.music-submission fieldset{border-color:#cbd3de}
+.weekly-board li span,.weekly-board p,.leaderboard-start p,.shared-draft p,.badge p,.badge-progress label,.phone-sharing p,.login-intro,.login-account-note,.login-legal,.notifications time,.sectionhead label{color:#525d6b}
+.weekly-board .tag,.tag,.tag-filter,.badge.earned strong,.reward-stats strong,.weekly-board li strong,.notifications a small,.music-submission legend{color:#994000}
+body .discovery-tags button,.discovery-grid .card .discovery-tags button,.viewer-tags button{background:#edf0f4;color:#384557;border:1px solid #c2cbd7}
+body .discovery-tags button:hover,.discovery-grid .card .discovery-tags button:hover{background:#dfe5ec;color:#171b22;border-color:#8d9aab}
+body .discovery-tags button:active{background:#d1d9e3}
+.dialog-back,.moderator-viewer-delete button{background:#edf0f4;color:#273342;border:1px solid #bbc4cf}
+.dialog-back:hover{background:#dfe5ec;color:#171b22;border-color:#8d9aab}
+.moderator-viewer-delete button{background:#fff1f0;color:#a12520;border-color:#e3aaa6}
+.moderator-viewer-delete button:hover:not(:disabled){background:#ffe0dd;color:#871e19;border-color:#c77973}
+.discovery-dialog .viewer-close-control .close,.dialog .close{background:#edf0f4;color:#273342;border:1px solid #bbc4cf}
+.discovery-dialog .viewer-close-control .close:hover,.dialog .close:hover{background:#dfe5ec;color:#171b22}
+.follow-button,.follow-button.is-following,.phone-sharing-minimized .phone-sharing-controls button,.cardactions button,.discovery-grid .card .cardactions button{background:#edf0f4;color:#273342;border-color:#bbc4cf}
+.follow-button.is-following{border-color:#c07530}
+.profile-options button,.following-name,.discovery-title,.race-title{background:transparent;color:#171b22}
+.profile-options button:hover,.following-name:hover{background:#edf0f4;color:#171b22}
+.discovery-title:hover{color:#ad2c25}
+.social-sign-in .signin-primary-options button{background:#f1f3f6;color:#171b22;border-color:#9da9b8}
+.social-sign-in .signin-primary-options .email-signin-choice{background:var(--orange);color:#171b22;border-color:var(--orange)}
+.social-sign-in .signin-primary-options button:hover{background:#e0e6ed;color:#171b22}
+.social-sign-in .signin-primary-options .email-signin-choice:hover{background:#ff9c4d}
+.eyebrow{background:#fff3e8;color:#994000;border-color:#e1b997}
+.sectionhead select{background:#fff;color:#171b22;border-color:#929daa}
+.viewer-navigation{background:#f3f5f7;color:#171b22}
+.viewer-navigation span,.round-progress small{color:#525d6b}
+.viewer-engagement{border-color:#d1d7df}
+.discovery-dialog .viewer-engagement .voting button:first-child{background:#e3342c;color:#fff}
+.discovery-dialog .viewer-engagement .voting .meh-vote{background:#dce2e9;color:#273342}
+.discovery-dialog .viewer-engagement .voting button:last-child{background:#657139;color:#fff}
+.discovery-dialog .viewer-engagement .voting button:hover:not(:disabled){color:#fff}
+.discovery-dialog .viewer-engagement .voting .meh-vote:hover:not(:disabled){color:#273342}
+.viewer-engagement>.viewer-card-actions button,.viewer-engagement>.viewer-card-actions .share-link-icon{background:transparent;color:#303b48}
+.viewer-engagement>.viewer-card-actions button:hover:not(:disabled){background:#edf0f4;color:#994000}
+.interest-navigation .tabs button{background:#fff;color:#303b48}
+.interest-navigation .tabs button:hover{background:#edf0f4;color:#171b22}
+.interest-navigation .tabs button[aria-pressed=true]{background:#e1e5eb;color:#171b22;border-bottom-color:var(--orange)}
+.photo-open,.tile-preview,.collection-tile>button{background:transparent}
+.collection-tile>button:hover{background:#e8ecf1;color:#171b22}
+.preview-play,.preview-source{color:#fff}
+.queue-undo-floating{background:#f5f7fa;color:#273342;border-color:#a3afbf}
