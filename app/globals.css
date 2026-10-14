@@ -321,3 +321,8 @@ body .discovery-tags button:active{background:#d1d9e3}
 .collection-tile>button:hover{background:#e8ecf1;color:#171b22}
 .preview-play,.preview-source{color:#fff}
 .queue-undo-floating{background:#f5f7fa;color:#273342;border-color:#a3afbf}
+
+.discovery-grid.small-cards .card,.discovery-image,.tile-preview,.pic{background:#edf0f4;color:#525d6b}
+.discovery-dialog .gallery-dots,.discovery-dialog .gallery-credit{background:#fff;color:#525d6b}
+.discovery-dialog .gallery-dots span{background:#a4adba}.discovery-dialog .gallery-dots span.is-current{background:#d3610a}
+.discovery-dialog.collection-preview .collection-discovery{background:transparent;color:#273342}
