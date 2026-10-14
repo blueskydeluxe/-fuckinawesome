@@ -265,3 +265,8 @@ footer{color:var(--light-muted);background:#f6f7f9}
 @media(prefers-reduced-transparency:reduce){header{background:#fff}}
 
 .profile-options{background:#fff;border-color:#d1d7df;box-shadow:0 8px 30px #17202a20}.profile-name{color:#525d6b}.profile-options button{color:#171b22}.profile-options button:hover{background:#edf0f4}.profile-options hr{border-color:#d1d7df}
+
+/* Clean, typography-led hero. */
+.hero{background:#fff}.hero-art{display:none}.hero:before,.hero:after{display:none}
+.hero h1.swiping-headline{font-size:clamp(46px,7vw,88px);line-height:1;letter-spacing:-1px;margin:0 auto 14px}
+@media(max-width:700px){.hero h1.swiping-headline{font-size:clamp(38px,11.8vw,58px);line-height:1.02;letter-spacing:-.5px}}
