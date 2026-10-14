@@ -214,3 +214,54 @@ header .voter-progress{padding:4px 0 0}header .voter-progress small{display:none
 @media(max-width:700px){.discovery-dialog .viewer-engagement{--vote-inset:18px}}
 @media(max-width:600px){.discovery-dialog .viewer-engagement{--vote-inset:16px}}
 @media(prefers-reduced-motion:reduce){.discovery-dialog .viewer-engagement .voting button{transition:none}}
+
+/* Light surfaces, with the existing brand and verdict colors preserved. */
+:root{color-scheme:light;--ink:#171b22;--light-muted:#525d6b;--light-border:#d1d7df}
+body{background:#fff;color:var(--ink)}
+header{background:#fffffff5;border-bottom:1px solid var(--light-border);box-shadow:0 2px 12px #17202a0c}
+.brand-approved path:first-child{fill:#171b22}
+.hero{background:#f4f5f7;color:var(--ink)}
+.hero:before{background:linear-gradient(90deg,#ffffffed,#ffffffd9 55%,#ffffffa8),linear-gradient(180deg,#ffffff00,#fff)}
+.hero:after{background:none}
+.hero h1,.hero .hero-accent,.hero p{text-shadow:none}
+.hero p{color:#303b48}
+.card,.discovery-grid .card,.dialog,.discovery-dialog{background:#fff;color:var(--ink);border-color:var(--light-border);box-shadow:0 5px 20px #17202a0a}
+.card:hover,.discovery-grid .card:hover{border-color:#98a3b1;box-shadow:0 7px 22px #17202a12}
+.card>.content,.viewer-title,.discovery-dialog .viewer-title,.viewer-engagement,.discovery-dialog-copy,.discovery-comments{background:#fff;color:var(--ink)}
+.content p,.discovery-grid .card .content p,.discovery-dialog-copy p,.information p,.dialog p,.muted,.discovery-grid .card .muted,.meter-label,.discovery-grid .card .meter-label,.meter-total,.confirmed-label,.comment-compose-footer,.community-comment time{color:var(--light-muted)}
+input,textarea,select{background:#fff;color:var(--ink);border-color:#929daa}
+input::placeholder,textarea::placeholder{color:#647080;opacity:1}
+button,.button-link{background:#171b22;color:#fff;border-color:#171b22}
+.primary,.submission-cta,.hero .submission-cta{background:var(--orange);border-color:var(--orange);color:#171b22}
+.interest-navigation{background:#f0f2f5;color:var(--ink);border-color:var(--light-border)}
+.interest-heading h2,.interest-select label,.interest-suggest,.category-scope{color:#303b48}
+.interest-select select{background:#fff;color:#171b22;border:1px solid var(--orange)}
+.interest-navigation .tabs,.category-views .tabs,.tabs{background:#fff;border-color:var(--light-border);box-shadow:none}
+.interest-navigation .tabs button{background:#fff;color:#303b48}
+.interest-navigation .tabs button:hover{background:#f0f2f5}
+.interest-navigation .tabs button[aria-pressed=true]{background:#e1e5eb;color:#171b22;border-bottom-color:var(--orange)}
+.notice,.empty,.unvoted-swipe-guide,.phone-sharing,.category-refiner,.profile-menu,.share-image-panel,.personal-feed-intro,.submission-state,.discovery-metrics,.music-intro,.music-player,.hall-intro,.five-card-invite,.race-to-hall,.round-progress,.round-contender,.round-picks article,.collection-tile,.race-contender{background:#f3f5f7;color:var(--ink);border-color:var(--light-border);box-shadow:none}
+.collection-tile>button{color:var(--ink);background:transparent}
+.collection-tile>button:hover{background:#e8ecf1}
+.collection-tile-copy>span,.collection-preview-grid figcaption,.race-contender span,.race-contender small,.race-title,.five-card-invite p,.race-heading p,.hall-intro p,.music-intro p,.personal-feed-intro p,.personal-feed-intro summary,.submission-state p,.following-name small,.metrics-grid span,.discoverer-row a,.notification-discovery-title{color:var(--light-muted)}
+.voter-progress strong,.level-badge,.submission-state strong,.metrics-grid strong,.hall-kicker,.collection-tile-copy small{color:#a34500}
+.voter-progress span,.voter-progress small{color:var(--light-muted)}
+.meter-track,.discovery-grid .card .meter-track,.voter-progress progress,.voter-progress progress::-webkit-progress-bar{background:#e1e5eb;border-color:#b9c2ce}
+.viewer-engagement>.viewer-card-actions button,.viewer-engagement>.viewer-card-actions .share-link-icon{background:transparent;color:#303b48}
+.viewer-engagement>.viewer-card-actions button:hover:not(:disabled){background:#eef1f5;color:#a34500}
+.discovery-title,.following-name,.race-title{background:transparent;color:#171b22}
+.discovery-dialog-copy h3,.information a:not(.logo),.dialog p a{color:#ad2c25}
+.discovery-grid .card .discovery-tags button{background:#edf0f4;color:#303b48;border-color:#b9c2ce}
+.discovery-comments,.community-comment,.profile-photo-editor,.following-list li,.discovery-preferences,footer,.dialog hr{border-color:var(--light-border)}
+footer{color:var(--light-muted);background:#f6f7f9}
+.metrics-grid>div{background:#fff}
+.preview-missing,.discovery-dialog-media,.gallery-slide{background:#edf0f4;color:#525d6b}
+.preview-missing strong{color:#171b22}
+.discovery-dialog .close,.dialog .close{background:#fff;color:#171b22;border:1px solid #a3adba}
+.queue-undo-floating{background:#fff;color:#171b22;border-color:#929daa;box-shadow:0 3px 16px #17202a24}
+/* Keep white labels over photos and on the connected voting spectrum. */
+.preview-source,.preview-play,.gallery-vote-count,.rank-banner{color:#fff}
+.discovery-dialog .viewer-engagement .voting button{color:#fff}
+@media(prefers-reduced-transparency:reduce){header{background:#fff}}
+
+.profile-options{background:#fff;border-color:#d1d7df;box-shadow:0 8px 30px #17202a20}.profile-name{color:#525d6b}.profile-options button{color:#171b22}.profile-options button:hover{background:#edf0f4}.profile-options hr{border-color:#d1d7df}
