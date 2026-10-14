@@ -162,8 +162,7 @@ export default function Hall({initialDiscovery=null,initialItem=null}) {
     if(nextValue)setMoment({...voteMoment(item,result,nextValue),item:updated,sequence:++momentSequence.current});
     setMomentRevision(x=>x+1);setNotificationRevision(x=>x+1);
     db.rpc('voter_levels',{member_ids:[user.id]}).then(levels=>{if(activeUser.current===user.id&&!levels.error)setVoterLevels(old=>({...old,...Object.fromEntries((levels.data||[]).map(x=>[x.member_id,x]))}))}).catch(()=>{});
-    let revealFirst=false;try{revealFirst=localStorage.getItem('awesome-vote-reveal')==='1'}catch{}
-    if(inViewer&&nextValue&&revealFirst){await new Promise(resolve=>setTimeout(resolve,1100));inViewer=openedCardRef.current?.id===id;if(activeUser.current!==user.id)return;}
+    if(inViewer&&nextValue){await new Promise(resolve=>setTimeout(resolve,1100));inViewer=openedCardRef.current?.id===id;if(activeUser.current!==user.id)return;}
     if(roundState.current?.phase==='voting'&&round.rows[round.index]?.id===id&&nextValue){
       const nextRound={...round,results:[...round.results,updated],index:round.index+1};
       setRound({...nextRound,phase:'advancing'});setMessage('');
