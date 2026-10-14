@@ -342,3 +342,8 @@ footer .phone-sharing-controls button{background:transparent;border:0;text-decor
 
 /* Gallery component styles must follow the shared light surfaces. */
 .discovery-dialog .gallery-dots,.discovery-dialog .gallery-credit{background:#fff!important;color:#525d6b!important}
+
+/* The previous verdict stays in a compact light panel while browsing continues. */
+.vote-moment{width:min(440px,calc(100% - 24px));padding:12px 42px 12px 12px;background:#f0f2f5;color:#273342;border:1px solid #b7c2cf;box-shadow:0 5px 24px #17202a25;gap:8px}
+.vote-moment .moment-dismiss{color:#384557;background:transparent}
+.vote-result-summary{display:flex;gap:12px;align-items:center;min-width:0}.vote-result-thumbnail{flex:0 0 64px;width:64px;height:84px;margin:0;padding:0;border:0;overflow:hidden;background:#dfe5ec}.vote-result-thumbnail img{width:100%;height:100%;object-fit:cover;display:block}.vote-result-copy{flex:1;min-width:0}.vote-result-copy>strong{font-size:13px;color:#171b22}.vote-result-title{margin:3px 0 8px;font-size:11px;line-height:1.25;color:#384557;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.vote-moment .vote-meters{margin:0}.vote-moment .vote-meter{margin:0 0 6px}.vote-moment .meter-label,.vote-moment .meter-label span{font-size:10px;line-height:1.2;color:#384557}.vote-moment .meter-track{height:5px}.vote-moment .meter-total{font-size:10px!important;margin:3px 0 0;color:#525d6b}.vote-moment .confirmed-label{display:none}.vote-moment.hall-celebration{border-color:#e3342c}
