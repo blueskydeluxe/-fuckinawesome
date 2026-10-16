@@ -1,0 +1,12 @@
+{
+ "0488e526-0c2c-4600-9a9c-42a41f58fcf9": {
+  "methodology":"reviewed-interest-v1","level":2,"reviewedAt":"2026-10-16T00:00:00Z",
+  "summary":"Specialist robotics coverage and a live crowdfunding campaign show emerging attention. This supports Gaining interest, not a claim of widespread popularity or accelerating search demand.",
+  "sources":[{"label":"CNX Software — robotics coverage","url":"https://www.cnx-software.com/2026/10/08/q8botone-a-palm-sized-open-source-quadruped-robot-with-esp32-c3-dynamixel-smart-actuators/"},{"label":"Hackster — robotics coverage","url":"https://www.hackster.io/news/say-hello-to-q8botone-the-wire-free-quadruped-robot-e703a077ddc3"},{"label":"Crowd Supply — public campaign activity","url":"https://www.crowdsupply.com/zerowire-robotics/q8botone"}]
+ },
+ "e2772a62-18d9-4365-b0a6-255834f3d8c2": {
+  "methodology":"reviewed-interest-v1","level":2,"reviewedAt":"2026-10-16T00:00:00Z",
+  "summary":"Recent coverage from New Atlas and Overland Expo shows interest across two outdoor and innovation publications. Wider consumer demand has not been established.",
+  "sources":[{"label":"New Atlas — October 8 feature","url":"https://newatlas.com/pickup-campers/wild-land-pickupmate-trunk-auto-camper/"},{"label":"Overland Expo — October 6 feature","url":"https://www.overlandexpo.com/compass/wild-lands-pickupmate-specs-details/"}]
+ }
+}
