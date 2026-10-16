@@ -347,3 +347,25 @@ footer .phone-sharing-controls button{background:transparent;border:0;text-decor
 .vote-moment{width:min(440px,calc(100% - 24px));padding:12px 42px 12px 12px;background:#f0f2f5;color:#273342;border:1px solid #b7c2cf;box-shadow:0 5px 24px #17202a25;gap:8px}
 .vote-moment .moment-dismiss{color:#384557;background:transparent}
 .vote-result-summary{display:flex;gap:12px;align-items:center;min-width:0}.vote-result-thumbnail{flex:0 0 64px;width:64px;height:84px;margin:0;padding:0;border:0;overflow:hidden;background:#dfe5ec}.vote-result-thumbnail img{width:100%;height:100%;object-fit:cover;display:block}.vote-result-copy{flex:1;min-width:0}.vote-result-copy>strong{font-size:13px;color:#171b22}.vote-result-title{margin:3px 0 8px;font-size:11px;line-height:1.25;color:#384557;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.vote-moment .vote-meters{margin:0}.vote-moment .vote-meter{margin:0 0 6px}.vote-moment .meter-label,.vote-moment .meter-label span{font-size:10px;line-height:1.2;color:#384557}.vote-moment .meter-track{height:5px}.vote-moment .meter-total{font-size:10px!important;margin:3px 0 0;color:#525d6b}.vote-moment .confirmed-label{display:none}.vote-moment.hall-celebration{border-color:#e3342c}
+/* Reviewed Internet Interest: independent of the community verdict. */
+.internet-interest{margin:12px 18px;padding:12px;background:#f4f5f7;color:#202731;border:1px solid #d8dde4}
+.interest-heading{display:flex;align-items:center;gap:12px}.interest-heading>svg{width:54px;height:54px;flex:none}.interest-heading svg text{font:700 14px Arial,sans-serif;fill:#202731}.interest-heading>div{display:flex;flex:1;flex-direction:column;gap:3px;min-width:0}.interest-heading strong{font-size:15px}.interest-heading small{font-size:11px;color:#515d6b}.interest-eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:#596573}.interest-heading .interest-help{width:44px;height:44px;flex:none;padding:0;background:#fff;color:#354252;border:1px solid #b8c1cd;border-radius:0}.interest-help:hover{background:#e8edf2}.interest-explanation{padding-top:10px;font-size:13px;line-height:1.55;color:#354252}.interest-explanation p{color:#354252!important;margin:9px 0}.interest-explanation a{color:#8c3d00;text-decoration:underline}.interest-explanation li{margin-bottom:7px}
+/* A calmer desktop gallery; phone layout remains three across. */
+@media(min-width:1024px){
+.grid.discovery-grid.small-cards{grid-template-columns:repeat(4,minmax(0,1fr));width:100%;max-width:1440px;margin-inline:auto;padding-inline:32px;gap:8px;background:#fff}
+.discovery-grid.small-cards>.collection-tile{grid-column:1/-1}
+}
+/* Stronger desktop surfaces stay distinct on ordinary office displays. */
+@media(min-width:1024px){
+:root{--light-border:#b6c0cc;--light-muted:#465260}
+.interest-navigation{background:#dfe4eb;border-color:#b6c0cc}
+.interest-navigation .tabs,.category-views .tabs,.tabs{background:#e8ecf1;border-color:#b6c0cc}
+.interest-navigation .tabs button{background:#e8ecf1;color:#273342}
+.interest-navigation .tabs button:hover{background:#d8dfe8}
+.interest-navigation .tabs button[aria-pressed=true]{background:#c9d2de;color:#171b22;border-bottom-color:var(--orange)}
+.profile-options,.profile-menu,.notice,.empty,.unvoted-swipe-guide,.phone-sharing,.category-refiner,.personal-feed-intro,.submission-state,.discovery-metrics,.music-intro,.music-player,.hall-intro,.five-card-invite,.race-to-hall,.round-progress,.round-contender,.round-picks article,.collection-tile,.race-contender,.weekly-board,.shared-draft,.rewards,.cover-picker,.category-requests,.notifications,.badge,.leaderboard-start{background:#e5e9ef;color:#202731;border-color:#b6c0cc}
+.card,.discovery-grid .card,.card>.content{background:#edf0f4;color:#202731;border-color:#b6c0cc}
+.internet-interest{background:#e5e9ef;border-color:#b6c0cc}
+.profile-options button:hover,.collection-tile>button:hover{background:#d4dce6}
+body .discovery-tags button,.viewer-tags button{background:#dfe5ec;color:#303b48;border-color:#aebac8}
+}

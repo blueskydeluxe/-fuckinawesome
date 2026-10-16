@@ -33,10 +33,14 @@ export default function DiscoveryGallery({id,title,cover,embed,loading,source}){
      {embed&&x.key==='cover'&&!playing&&<button className="dialog-play" onClick={()=>setPlaying(true)}>▶ Watch video here</button>}
     </div>)}
    </div>:playing&&embed?<iframe src={embed} title={`Video: ${title}`} allow="encrypted-media; fullscreen; picture-in-picture" allowFullScreen referrerPolicy="strict-origin-when-cross-origin"/>:<div className="dialog-media-missing"><p>{loading?'Loading discovery…':'This site doesn’t provide a viewable preview.'}</p>{embed&&<button onClick={()=>setPlaying(true)}>▶ Watch video here</button>}</div>}
+   {slides.length>1&&!playing&&<div className="gallery-desktop-navigation" data-no-swipe><button type="button" className="gallery-previous" aria-label="Previous image" disabled={position===0} onClick={()=>go(position-1)}>‹</button><button type="button" className="gallery-next" aria-label="Next image" disabled={position===slides.length-1} onClick={()=>go(position+1)}>›</button></div>}
   </div>
   {slides.length>1&&<div className="gallery-dots" role="img" aria-label={`Picture ${position+1} of ${slides.length}`}>{slides.map((x,i)=><span key={x.key} className={i===position?'is-current':''} aria-hidden="true"/>)}</div>}
   {slide?.source&&<a className="gallery-credit" href={slide.source} target="_blank" rel="noopener noreferrer">Image source & credits ↗</a>}
   <style jsx>{`
+   .discovery-dialog-media{position:relative}
+   .gallery-desktop-navigation{display:none}
+   @media(min-width:1024px) and (hover:hover) and (pointer:fine){.gallery-desktop-navigation{display:block;position:absolute;inset:0;pointer-events:none}.gallery-desktop-navigation button{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:52px;padding:0;border:1px solid #c8cfd8;border-radius:0;background:#fffffff0;color:#202731;font:36px/1 Arial,sans-serif;box-shadow:0 2px 10px #0002;pointer-events:auto}.gallery-desktop-navigation button:hover{background:#fff;border-color:#f57a20}.gallery-desktop-navigation button:disabled{opacity:0;pointer-events:none}.gallery-previous{left:12px}.gallery-next{right:12px}}
    .gallery-dots{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;padding:12px 8px;background:#101318;pointer-events:none}
    .gallery-dots span{width:6px;height:6px;border-radius:50%;background:#6f7680;transition:background 120ms,transform 120ms}
    .gallery-dots span.is-current{background:#ff8b32;transform:scale(1.2)}
