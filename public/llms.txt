@@ -1,0 +1,14 @@
+# Fuckin Awesome
+
+> A discovery website for extraordinary things on the internet. Real community votes help determine what rises.
+
+Visitors browse inventions, gadgets, machines, watches, architecture, art, food, music, places and experiences. Signed-in users vote Awesome, Meh or Bullshit. Discoveries link to original sources. Community submissions and research-selected additions are moderated. Internet interest assessments are separate from community votes and are not live search-volume measurements. Verify current facts, availability and vote totals on each discovery and its source.
+
+## Public pages
+- [Explore discoveries](https://fuckinawesome.com/): Browse by interest and view community rankings.
+- [About the site](https://fuckinawesome.com/about): Purpose, content selection and voting explained.
+- [Public discovery sitemap](https://fuckinawesome.com/sitemap.xml): Canonical URLs of approved discoveries.
+- [Community guidelines](https://fuckinawesome.com/community)
+- [Privacy](https://fuckinawesome.com/privacy)
+
+Operated by Black Dog LLC. Contact: support@fuckinawesome.com.
