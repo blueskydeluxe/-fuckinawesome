@@ -1,5 +1,5 @@
 import {Suspense} from 'react';
-import BrandLogo from './brand-logo';
+import LearnHeader from './learn-header';
 import VoteMeters from './vote-meters';
 import InternetInterest from './internet-interest';
 import {publicClient} from '../lib/public-discovery.mjs';
@@ -7,7 +7,7 @@ import {learnPages} from '../lib/learn-pages.mjs';
 import './learn.css';
 
 export function learnMetadata(key){const p=learnPages[key],title=p.title+' — Fuckin Awesome';return {title,description:p.description,alternates:{canonical:'https://fuckinawesome.com'+p.path},openGraph:{title,description:p.description,url:'https://fuckinawesome.com'+p.path,type:'website'}};}
-export function LearnHeader(){return <header className="learn-header"><div className="wrap nav"><BrandLogo/><nav aria-label="Learn about FuckinAwesome"><a href="/about">Why we exist</a><a href="/how-it-works">How it works</a><a href="/guides">Guides</a><a href="/">Explore discoveries ↗</a></nav></div></header>;}
+export {LearnHeader};
 export function LearnFooter(){return <footer className="learn-footer"><p>Real people, real discoveries.</p><nav className="footerlinks" aria-label="About the community"><a href="/about">About</a><a href="/how-it-works">How it works</a><a href="/guides">Guides</a><a href="/for-creators">For creators</a><a href="/ai-policy">AI policy</a><a href="/community">Community guidelines</a><a href="/privacy">Privacy</a><a href="mailto:support@fuckinawesome.com">Contact support</a></nav><small>Operated by Black Dog LLC.</small></footer>;}
 export function AIPolicyNote(){return <aside className="learn-policy"><span className="learn-kicker">Our content standard</span><h2>Real discoveries. No AI-generated submissions.</h2><p>AI-generated discovery content is not accepted and is rejected when identified. AI only helps search for interest and demand signals, surface potential discoveries, and moderate unsafe content.</p><a href="/ai-policy">Read our AI policy →</a></aside>;}
 
