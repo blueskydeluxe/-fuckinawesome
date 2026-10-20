@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {readFileSync} from 'node:fs';
-const source=readFileSync(new URL('../lib/swipe-feedback.mjs',import.meta.url),'utf8').replaceAll('export function','function')+';({getSwipeFeedback,setSwipeFeedback,prepareSwipeAudio,playSwipeSound,playSwipeFeedback})';
+const source=readFileSync(new URL('../lib/swipe-feedback.mjs',import.meta.url),'utf8').replaceAll('export function','function')+';({getSwipeFeedback,setSwipeFeedback,prepareSwipeAudio,playSwipeSound,playSwipeFeedback,supportsSwipeHaptics})';
 function setup(saved=null,{unsupported=false,reject=false,seekFails=false,deferred=false}={}){
  const pulses=[],plays=[],clips=[],writes=[];let release;
  class Audio{constructor(src){this.src=src;this.paused=true;clips.push(this)}set currentTime(value){if(seekFails)throw Error('metadata not loaded')}play(){plays.push(this.src);this.paused=false;return reject?Promise.reject(Error('NotAllowedError')):deferred?new Promise(r=>release=r):Promise.resolve()}pause(){this.paused=true}}
@@ -30,4 +30,9 @@ test('first playback still starts when Safari cannot seek before metadata loads'
 });
 test('muting stops a pending effect and prevents delayed playback after opt-out',async()=>{
  const h=setup('{"sound":true}',{deferred:true});const playing=h.playSwipeSound(1);h.setSwipeFeedback({sound:false});h.release();assert.equal(await playing,false);assert.ok(h.clips.every(x=>x.paused));
+});
+
+test('haptic availability reflects the browser API, including Safari-style absence',()=>{
+ assert.equal(setup().supportsSwipeHaptics(),true);
+ assert.equal(setup(null,{unsupported:true}).supportsSwipeHaptics(),false);
 });
