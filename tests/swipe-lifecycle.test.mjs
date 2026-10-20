@@ -65,7 +65,7 @@ test('a canceled pinch resets even when a finger remains',()=>{
 
 test('diagonal scrolling never grabs or votes, even if the finger drifts sideways later',()=>{
  const h=harness();h.render({id:'first',enabled:true,busy:false,onVote:()=>assert.fail('scroll must not vote')});
- h.event('touchstart',100,100);h.event('touchmove',112,106);assert.equal(h.node.style.transform,'');
+ h.event('touchstart',100,100);h.event('touchmove',106,104);assert.equal(h.node.style.transform,'');
  h.event('touchmove',120,130);assert.equal(h.result.drag,0);assert.equal(h.result.className.includes('is-held'),false);
  h.event('touchmove',240,160);h.event('touchend',250,170);assert.equal(h.result.drag,0);
 });
@@ -88,4 +88,10 @@ test('abandoned and canceled swipes remain quiet',()=>{
  const h=harness();h.render({id:'one',enabled:true,busy:false,onVote:()=>assert.fail('must not vote')});
  h.event('touchstart',190);h.event('touchmove',210);h.event(type,210);assert.equal(h.feedback.length,0);
  }
+});
+
+test('a normal diagonal thumb arc grabs on the first small movement',()=>{
+ const h=harness();h.render({id:'thumb',enabled:true,busy:false,onVote:()=>assert.fail('short drag must not vote')});
+ h.event('touchstart',100,100);h.event('touchmove',110,107);assert.equal(h.result.drag,1);assert.match(h.node.style.transform,/translate3d\(10px/);
+ h.event('touchmove',125,115);assert.equal(h.result.drag,1);h.event('touchend',125,115);assert.equal(h.feedback.length,0);
 });

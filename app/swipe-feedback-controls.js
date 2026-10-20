@@ -1,9 +1,10 @@
 'use client';
 import {useEffect,useState} from 'react';
-import {getSwipeFeedback,setSwipeFeedback,prepareSwipeAudio} from '../lib/swipe-feedback.mjs';
+import {getSwipeFeedback,setSwipeFeedback,prepareSwipeAudio,playSwipeSound} from '../lib/swipe-feedback.mjs';
 export default function SwipeFeedbackControls(){
- const [prefs,setPrefs]=useState({sound:false,haptics:true});
+ const [prefs,setPrefs]=useState({sound:true,haptics:true}),[soundStatus,setSoundStatus]=useState('');
  useEffect(()=>{const refresh=()=>setPrefs({...getSwipeFeedback()});refresh();window.addEventListener('swipe-feedback-change',refresh);return()=>window.removeEventListener('swipe-feedback-change',refresh)},[]);
- function toggle(name){const next=setSwipeFeedback({[name]:!prefs[name]});setPrefs({...next});if(next.sound)prepareSwipeAudio()}
- return <details className="swipe-feedback-settings" data-no-swipe><summary>Swipe feel</summary><div><button type="button" aria-pressed={prefs.sound} onClick={()=>toggle('sound')}>Sound: {prefs.sound?'On':'Off'}</button><button type="button" aria-pressed={prefs.haptics} onClick={()=>toggle('haptics')}>Haptics: {prefs.haptics?'On':'Off'}</button><small>Haptics on supported devices. Saved on this browser.</small></div></details>;
+ function toggle(name){const next=setSwipeFeedback({[name]:!prefs[name]});setPrefs({...next});setSoundStatus('');if(name==='sound'&&next.sound)testSound()}
+ function testSound(){setPrefs({...setSwipeFeedback({sound:true})});prepareSwipeAudio();playSwipeSound(1).then(played=>setSoundStatus(played?'Test played. If silent, check your media volume and iPhone Silent Mode.':'Sound could not start. Tap Test sound again and check your media volume.'))}
+ return <details className="swipe-feedback-settings" data-no-swipe><summary>Swipe feel</summary><div><button type="button" aria-pressed={prefs.sound} onClick={()=>toggle('sound')}>Sound: {prefs.sound?'On':'Off'}</button><button type="button" aria-pressed={prefs.haptics} onClick={()=>toggle('haptics')}>Haptics: {prefs.haptics?'On':'Off'}</button><button type="button" onClick={testSound}>{prefs.sound?'Test sound':'Enable & test sound'}</button><small>Haptics on supported devices. Saved on this browser.</small>{soundStatus&&<small role="status">{soundStatus}</small>}</div></details>;
 }

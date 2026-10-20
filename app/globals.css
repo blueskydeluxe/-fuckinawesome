@@ -384,3 +384,18 @@ body .discovery-tags button,.viewer-tags button{background:#dfe5ec;color:#303b48
 .swipe-card.is-held{box-shadow:0 8px 24px #17202a25}
 }
 @media(prefers-reduced-motion:reduce){.swipe-card.is-dragging .swipe-verdict{transform:none}}
+
+/* Direct thumb dragging on the card, without interfering with photo carousels. */
+.swipe-card .viewer-title,.swipe-card .internet-interest,.swipe-card .viewer-engagement{touch-action:pan-y pinch-zoom}
+.swipe-card.is-dragging{will-change:transform;box-shadow:none}
+.swipe-card.is-dragging .internet-interest{user-select:none;-webkit-user-select:none}
+.discovery-dialog .internet-interest{margin:6px 16px;padding:0;background:transparent;border:0;box-shadow:none}
+.discovery-dialog .interest-rating-heading{gap:8px;min-height:44px}
+.discovery-dialog .interest-rating-heading>svg{width:36px;height:36px}
+.discovery-dialog .interest-rating-heading strong{font-size:13px;line-height:1.15}
+.discovery-dialog .interest-eyebrow{font-size:9px;letter-spacing:.06em}
+.discovery-dialog .interest-rating-heading .interest-help{border:0;background:transparent;width:44px;height:44px}
+.discovery-dialog .interest-explanation{padding:8px 0;font-size:12px;line-height:1.45}
+.discovery-dialog .swipe-to-vote{width:calc(100% + var(--vote-inset)*2);margin:0 calc(-1 * var(--vote-inset));padding:12px 16px;background:transparent;border:0;color:#202731;font-family:var(--display);font-size:25px;line-height:1;text-align:center;letter-spacing:.06em;touch-action:pan-y pinch-zoom;user-select:none;-webkit-user-select:none}
+.discovery-dialog .viewer-engagement:has(.swipe-to-vote){padding-top:0}
+.discovery-dialog .viewer-engagement .swipe-to-vote+.voting{margin-top:0}
