@@ -1,0 +1,94 @@
+{
+  "a1f6b393-9c67-4a23-9151-7f2faedd9fd5": {
+    "query": "Porsche Mission S",
+    "sources": [
+      {
+        "url": "https://arstechnica.com/cars/2026/10/porsche-previews-its-future-with-mission-s-supercar-concept/",
+        "label": "Ars Technica",
+        "observedAt": "2026-10-15T00:00:00Z",
+        "verified": true
+      },
+      {
+        "url": "https://www.motortrend.com/news/porsche-mission-s-concept-design-styling",
+        "label": "MotorTrend",
+        "observedAt": "2026-10-16T00:00:00Z",
+        "verified": true
+      },
+      {
+        "url": "https://www.wallpaper.com/transportation/porsche-mission-s-vision-reveal",
+        "label": "Wallpaper",
+        "observedAt": "2026-10-16T00:00:00Z",
+        "verified": true
+      },
+      {
+        "url": "https://www.t3.com/auto/mission-s-revealed-this-new-porsche-supercar-isnt-electric",
+        "label": "T3",
+        "observedAt": "2026-10-16T00:00:00Z",
+        "verified": true
+      }
+    ]
+  },
+  "355f08aa-e83b-4926-bfd5-407920085bf6": {
+    "query": "Tesla Roadster",
+    "sources": [
+      {
+        "url": "https://www.axios.com/2026/10/14/tesla-roadster-details-elon-musk",
+        "label": "Axios",
+        "observedAt": "2026-10-14T00:00:00Z",
+        "verified": true
+      },
+      {
+        "url": "https://www.caranddriver.com/news/a74145531/tesla-roadster-revealed/",
+        "label": "Car and Driver",
+        "observedAt": "2026-10-16T00:00:00Z",
+        "verified": true
+      },
+      {
+        "url": "https://www.latimes.com/business/story/2026-10-17/elon-musk-just-showed-off-flying-car-heres-what-to-know-about-tesla-roadster",
+        "label": "Los Angeles Times",
+        "observedAt": "2026-10-17T00:00:00Z",
+        "verified": true
+      },
+      {
+        "url": "https://www.theatlantic.com/ideas/2026/10/tesla-elon-musk-roadster/689059/",
+        "label": "The Atlantic",
+        "observedAt": "2026-10-17T00:00:00Z",
+        "verified": true
+      }
+    ]
+  },
+  "3df30b7d-7b51-41c4-8bce-d8811078c129": {
+    "query": "Dyson CameraJet",
+    "sources": [
+      {
+        "url": "https://www.t3.com/home-living/grooming/dyson-camerajet-review-a-clever-concept-with-some-everyday-frustrations",
+        "label": "T3",
+        "observedAt": "2026-10-16T00:00:00Z",
+        "verified": true
+      },
+      {
+        "url": "https://www.digitalcameraworld.com/cameras/digital-cameras/bizarre-but-brilliant-toothbrush-with-built-in-camera-makes-times-best-inventions-of-2026-list",
+        "label": "Digital Camera World",
+        "observedAt": "2026-10-17T00:00:00Z",
+        "verified": true
+      }
+    ]
+  },
+  "f5ab4e8a-c32b-4e11-820e-49cf5c52e358": {
+    "query": "iPhone Duo",
+    "sources": [
+      {
+        "url": "https://elpais.com/america-colombia/2026-10-19/el-iphone-duo-en-colombia-precio-donde-comprarlo-pros-y-contras-de-adquirir-el-nuevo-telefono-plegable-de-apple.html",
+        "label": "El Pais",
+        "observedAt": "2026-10-19T00:00:00Z",
+        "verified": true
+      },
+      {
+        "url": "https://cincodias.elpais.com/smartlife/smartphones/2026-10-19/iphone-duo-capacidad-bateria.html",
+        "label": "Cinco Dias",
+        "observedAt": "2026-10-19T00:00:00Z",
+        "verified": true
+      }
+    ]
+  }
+}
