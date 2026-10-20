@@ -369,3 +369,18 @@ footer .phone-sharing-controls button{background:transparent;border:0;text-decor
 .profile-options button:hover,.collection-tile>button:hover{background:#d4dce6}
 body .discovery-tags button,.viewer-tags button{background:#dfe5ec;color:#303b48;border-color:#aebac8}
 }
+
+/* Swipe feedback */
+.swipe-feedback-settings{font-size:12px;color:inherit;margin:6px 12px;position:relative;z-index:5}
+.swipe-feedback-settings summary{cursor:pointer;min-height:44px;display:flex;align-items:center;text-decoration:underline;text-underline-offset:3px;width:fit-content}
+.swipe-feedback-settings>div{display:flex;flex-wrap:wrap;gap:8px;padding:4px 0 10px}
+.swipe-feedback-settings button{min-height:44px;padding:8px 12px;border:1px solid #aab4c2;background:#e5e9ef;color:#202731;border-radius:8px}
+.swipe-feedback-settings button[aria-pressed=true]{border-color:#943126;background:#f5ded9;color:#64251e}
+.swipe-feedback-settings small{flex-basis:100%;font-size:11px}
+@media(max-width:700px){
+.swipe-card.is-dragging .swipe-verdict{opacity:calc(.25 + var(--swipe-progress,0)*.75);transform:scale(calc(.94 + var(--swipe-progress,0)*.06));transition:none}
+.discovery-dialog>.swipe-card.is-dragging::after{opacity:var(--swipe-progress,0);transition:none}
+.discovery-dialog>.swipe-card{position:relative}
+.swipe-card.is-held{box-shadow:0 8px 24px #17202a25}
+}
+@media(prefers-reduced-motion:reduce){.swipe-card.is-dragging .swipe-verdict{transform:none}}

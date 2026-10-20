@@ -1,4 +1,5 @@
 'use client';
+import SwipeFeedbackControls from './swipe-feedback-controls';
 import VoteMoment from './vote-moment';
 import {FollowButton} from './following';
 import MusicPlayer from './music-player';
@@ -25,8 +26,9 @@ export default function DiscoveryDialog({moment,onMomentOpen,onMomentDismiss,rou
  const source=safeLink(item.url);
  return <dialog ref={dialog} className="discovery-dialog" aria-labelledby="discovery-dialog-title" onClose={onClose} onClick={e=>{if(e.target===dialog.current){const r=dialog.current.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)onClose()}}}>
   <VoteMoment moment={moment} onOpen={onMomentOpen} onDismiss={onMomentDismiss}/>
-  <div className="viewer-close-control"><button autoFocus className="close" aria-label="Close discovery" onClick={onClose}>×</button></div>
+  <SwipeFeedbackControls/><div className="viewer-close-control"><button autoFocus className="close" aria-label="Close discovery" onClick={onClose}>×</button></div>
   <div className={swipe.className} ref={swipe.ref} {...swipe.handlers}>
+  {swipe.drag!==0&&<div className="swipe-verdict" aria-hidden="true">{swipe.drag>0?'FUCKIN AWESOME':'IT’S BULLSHIT'}</div>}
   <h2 id="discovery-dialog-title" className="viewer-title">{item.title}</h2>
   <DiscoveryGallery key={`gallery-${item.id}`} id={item.id} title={item.title} cover={image} embed={preview?.embed} loading={!image&&!imageFailed&&preview===null} source={source}/>
   <InternetInterest key={`interest-${item.id}`} record={interestRatings[item.id]}/>

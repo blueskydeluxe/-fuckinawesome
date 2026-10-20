@@ -6,18 +6,18 @@ import {swipeIntent,swipeVote} from '../lib/swipe.mjs';
 
 // Exercise the real touch handlers with deterministic hook, frame and timer scheduling.
 function harness(){
- let slots=[],cursor=0,dirty=false,effects=[],pending=[],timers=new Map(),frames=new Map(),sequence=0;
- const node={style:{},clientWidth:390,listeners:{},addEventListener(k,f){this.listeners[k]=f},removeEventListener(k,f){if(this.listeners[k]===f)delete this.listeners[k]}};
+ let feedback=[],slots=[],cursor=0,dirty=false,effects=[],pending=[],timers=new Map(),frames=new Map(),sequence=0;
+ const node={style:{setProperty(k,v){this[k]=v},removeProperty(k){delete this[k]}},clientWidth:390,listeners:{},addEventListener(k,f){this.listeners[k]=f},removeEventListener(k,f){if(this.listeners[k]===f)delete this.listeners[k]}};
  const ref=v=>{const i=cursor++;return slots[i]??=(i===0?{current:node}:{current:v})};
  const state=v=>{const i=cursor++;slots[i]??=v;return [slots[i],n=>{if(slots[i]!==n){slots[i]=n;dirty=true}}]};
  const effect=(fn,deps)=>{const i=cursor++,old=slots[i];if(!old||deps.some((d,j)=>d!==old.deps[j]))pending.push(()=>{old?.cleanup?.();slots[i]={deps,cleanup:fn()}})};
- const context={useRef:ref,useState:state,useLayoutEffect:effect,useEffect:(fn,deps)=>effects.push(()=>effect(fn,deps)),swipeIntent,swipeVote,Date,window:{innerWidth:390,matchMedia:()=>({matches:false})},requestAnimationFrame:fn=>{const id=++sequence;frames.set(id,fn);return id},cancelAnimationFrame:id=>frames.delete(id),setTimeout:fn=>{const id=++sequence;timers.set(id,fn);return id},clearTimeout:id=>timers.delete(id)};
+ const context={useRef:ref,useState:state,useLayoutEffect:effect,useEffect:(fn,deps)=>effects.push(()=>effect(fn,deps)),swipeIntent,swipeVote,prepareSwipeAudio:()=>{},playSwipeFeedback:v=>feedback.push(v),Date,window:{innerWidth:390,matchMedia:()=>({matches:false})},requestAnimationFrame:fn=>{const id=++sequence;frames.set(id,fn);return id},cancelAnimationFrame:id=>frames.delete(id),setTimeout:fn=>{const id=++sequence;timers.set(id,fn);return id},clearTimeout:id=>timers.delete(id)};
  const source=readFileSync(new URL('../app/use-card-swipe.js',import.meta.url),'utf8').replace(/^import .*$/gm,'').replace('export default function','function')+'\nuseCardSwipe';
  const hook=vm.runInNewContext(source,context);let props,result;
  function render(next=props){props=next;do{dirty=false;cursor=0;result=hook(props);let tasks=pending.splice(0);for(const f of tasks)f()}while(dirty);return result}
  function event(type,x,y=100){const finger={identifier:1,clientX:x,clientY:y},e={type,target:{closest:()=>null},touches:type==='touchend'?[]:[finger],changedTouches:[finger],timeStamp:type==='touchstart'?0:type==='touchmove'?40:50,cancelable:true,preventDefault(){}};node.listeners[type](e);for(const f of frames.values())f();frames.clear();render();}
  function touchEvent(type,touches,target){node.listeners[type]({type,touches,target,changedTouches:[],cancelable:true,preventDefault(){}});render()}
- return {node,render,event,touchEvent,get result(){return result},runTimer(){const [id,fn]=timers.entries().next().value;timers.delete(id);return fn()}};
+ return {node,render,event,touchEvent,feedback,get result(){return result},runTimer(){const [id,fn]=timers.entries().next().value;timers.delete(id);return fn()}};
 }
 for(const direction of [-1,1])test('next discovery has no previous verdict before paint ('+direction+')',async()=>{
  const h=harness();let release;const vote=new Promise(r=>release=r);const onVote=()=>vote;
@@ -74,4 +74,18 @@ test('a tentative horizontal drag yields when the user turns vertically',()=>{
  h.event('touchstart',100,100);h.event('touchmove',120,101);assert.equal(h.result.drag,1);
  h.event('touchmove',130,160);assert.equal(h.result.drag,0);assert.equal(h.node.style.transform,'');
  h.event('touchend',140,190);assert.equal(h.result.drag,0);
+});
+
+for(const value of [-1,1])test('one feedback cue on committed release '+value,async()=>{
+ const h=harness();h.render({id:'one',enabled:true,busy:false,onVote:async()=>{}});
+ h.event('touchstart',190);h.event('touchmove',190+value*120);
+ assert.equal(h.feedback.length,0);assert.equal(h.node.style['--swipe-progress'],1);
+ h.event('touchend',190+value*140);assert.deepEqual(h.feedback,[value]);
+ await h.runTimer();assert.equal(h.node.style['--swipe-progress'],undefined);
+});
+test('abandoned and canceled swipes remain quiet',()=>{
+ for(const type of ['touchend','touchcancel']){
+ const h=harness();h.render({id:'one',enabled:true,busy:false,onVote:()=>assert.fail('must not vote')});
+ h.event('touchstart',190);h.event('touchmove',210);h.event(type,210);assert.equal(h.feedback.length,0);
+ }
 });
