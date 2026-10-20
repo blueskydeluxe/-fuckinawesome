@@ -399,3 +399,18 @@ body .discovery-tags button,.viewer-tags button{background:#dfe5ec;color:#303b48
 .discovery-dialog .swipe-to-vote{width:calc(100% + var(--vote-inset)*2);margin:0 calc(-1 * var(--vote-inset));padding:12px 16px;background:transparent;border:0;color:#202731;font-family:var(--display);font-size:25px;line-height:1;text-align:center;letter-spacing:.06em;touch-action:pan-y pinch-zoom;user-select:none;-webkit-user-select:none}
 .discovery-dialog .viewer-engagement:has(.swipe-to-vote){padding-top:0}
 .discovery-dialog .viewer-engagement .swipe-to-vote+.voting{margin-top:0}
+
+/* Card feedback lives beside Save, with its settings tucked into a popover. */
+.viewer-engagement>.viewer-card-actions .swipe-feedback-settings.is-compact{flex:0 0 44px;width:44px;height:44px;margin:0;color:#303b48}
+.swipe-feedback-settings.is-compact summary{display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:44px;height:44px;min-height:44px;margin:0;padding:12px;border:0;border-radius:0;text-decoration:none;list-style:none;cursor:pointer}
+.swipe-feedback-settings.is-compact summary::-webkit-details-marker{display:none}
+.swipe-feedback-settings.is-compact summary svg{width:18px;height:18px;flex:none}
+.swipe-feedback-settings.is-compact summary:hover,.swipe-feedback-settings.is-compact[open] summary{background:#edf0f4;color:#994000}
+.swipe-feedback-settings.is-compact summary:focus-visible{outline:2px solid #d3610a;outline-offset:-2px}
+.swipe-feedback-settings.is-compact>div{position:absolute;right:0;bottom:calc(100% + 8px);z-index:30;box-sizing:border-box;width:280px;max-width:calc(100vw - 40px);max-height:50dvh;overflow:auto;margin:0;padding:12px;gap:8px;background:#fff;color:#273342;border:1px solid #b6c0cc;border-radius:10px;box-shadow:0 5px 20px #17202a26}
+.viewer-engagement>.viewer-card-actions .swipe-feedback-settings.is-compact>div button{display:inline-flex;flex:1 1 auto;width:auto;min-width:0;height:auto;min-height:44px;margin:0;padding:8px 10px;border:1px solid #aab4c2;border-radius:8px;background:#e5e9ef;color:#202731;font-size:12px;white-space:normal}
+.viewer-engagement>.viewer-card-actions .swipe-feedback-settings.is-compact>div button[aria-pressed=true]{border-color:#943126;background:#f5ded9;color:#64251e}
+.swipe-feedback-settings.is-compact>div small{display:block;flex-basis:100%;font-size:11px;line-height:1.4;text-align:left}
+
+/* Unread notifications use a plain round mobile-style dot. */
+.profile-trigger .notification-dot{border-radius:50%!important;border:0!important;box-shadow:none!important;outline:0}

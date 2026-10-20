@@ -55,7 +55,8 @@
         "observedAt": "2026-10-17T00:00:00Z",
         "verified": true
       }
-    ]
+    ],
+    "wikiTitle": "Tesla Roadster (third generation)"
   },
   "3df30b7d-7b51-41c4-8bce-d8811078c129": {
     "query": "Dyson CameraJet",
@@ -87,6 +88,48 @@
         "url": "https://cincodias.elpais.com/smartlife/smartphones/2026-10-19/iphone-duo-capacidad-bateria.html",
         "label": "Cinco Dias",
         "observedAt": "2026-10-19T00:00:00Z",
+        "verified": true
+      }
+    ]
+  },
+  "18aac5fd-cf94-438b-abf1-20620c8de223": {
+    "query": "Jaguar Type 01",
+    "wikiTitle": "Jaguar Type 01",
+    "sources": [
+      {
+        "url": "https://www.topgear.com/car-news/big-reads/jags-ninth-life-long-last-heres-jaguar-type-01-luxury-electric-gt",
+        "label": "Top Gear",
+        "observedAt": "2026-10-07T00:00:00Z",
+        "verified": true
+      },
+      {
+        "url": "https://www.octane-magazine.com/news/jaguar-type-01-revealed-specs-price-first-impressions/",
+        "label": "Octane",
+        "observedAt": "2026-10-07T00:00:00Z",
+        "verified": true
+      },
+      {
+        "url": "https://www.thenationalnews.com/magazine/2026/10/07/jaguar-type-01-revealed-as-controversial-reinvention-becomes-reality/",
+        "label": "The National",
+        "observedAt": "2026-10-07T00:00:00Z",
+        "verified": true
+      },
+      {
+        "url": "https://www.wallpaper.com/transportation/the-jaguar-type-01-is-finally-here-to-herald-the-brands-electric-era-can-the-cat-strike-back",
+        "label": "Wallpaper",
+        "observedAt": "2026-10-07T00:00:00Z",
+        "verified": true
+      },
+      {
+        "url": "https://www.autocar.co.uk/car-news/electric-cars/new-jaguar-type-01-radical-ev-arrives-spearhead-brands-reboot",
+        "label": "Autocar",
+        "observedAt": "2026-10-07T00:00:00Z",
+        "verified": true
+      },
+      {
+        "url": "https://technews.tw/2026/10/07/jaguar-type-01-official-launch/",
+        "label": "TechNews",
+        "observedAt": "2026-10-07T00:00:00Z",
         "verified": true
       }
     ]

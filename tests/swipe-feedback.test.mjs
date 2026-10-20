@@ -10,11 +10,11 @@ function setup(saved=null,{unsupported=false,reject=false,seekFails=false,deferr
  return {...api,pulses,plays,clips,writes,release:()=>release()};
 }
 test('sound defaults on; haptics use one brief pulse per committed swipe',async()=>{
- const h=setup();await h.playSwipeFeedback(1);assert.deepEqual(h.pulses,[8]);assert.deepEqual(h.plays,['/sounds/swipe-awesome.wav?v=2']);
+ const h=setup();await h.playSwipeFeedback(1);assert.deepEqual(h.pulses,[8]);assert.deepEqual(h.plays,['/sounds/swipe-awesome.wav?v=3']);
  h.setSwipeFeedback({sound:true,haptics:false});const playing=h.playSwipeFeedback(-1);
  // play() must run inside the gesture, before any promise or timer boundary.
- assert.deepEqual(h.plays,['/sounds/swipe-awesome.wav?v=2','/sounds/swipe-bullshit.wav?v=2']);assert.equal(await playing,true);assert.deepEqual(h.pulses,[8]);
- await h.playSwipeFeedback(1);assert.deepEqual(h.plays,['/sounds/swipe-awesome.wav?v=2','/sounds/swipe-bullshit.wav?v=2','/sounds/swipe-awesome.wav?v=2']);assert.equal(JSON.parse(h.writes[0]).sound,true);
+ assert.deepEqual(h.plays,['/sounds/swipe-awesome.wav?v=3','/sounds/swipe-bullshit.wav?v=3']);assert.equal(await playing,true);assert.deepEqual(h.pulses,[8]);
+ await h.playSwipeFeedback(1);assert.deepEqual(h.plays,['/sounds/swipe-awesome.wav?v=3','/sounds/swipe-bullshit.wav?v=3','/sounds/swipe-awesome.wav?v=3']);assert.equal(JSON.parse(h.writes[0]).sound,true);
 });
 test('malformed preferences, unsupported devices and neutral outcomes are safe',async()=>{
  const h=setup('invalid',{unsupported:true});h.setSwipeFeedback({sound:true});assert.equal(await h.playSwipeFeedback(1),false);await h.playSwipeFeedback(2);await h.playSwipeFeedback(0);assert.equal(h.plays.length,0);
