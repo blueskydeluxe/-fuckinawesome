@@ -17,8 +17,8 @@ export default function DiscoveryModeration({item,onChanged}){
  }
  return <div className="content-screen" onClick={event=>event.stopPropagation()}>
   {!review?<button disabled={busy||!item.image_path} onClick={()=>{setReview(true);setMessage('');}}>Approve</button>:<div>
-   <p>Review the cover, description, linked page and any video or music before publishing. Your confirmed review overrides automated image screening and is recorded.</p>
-   <label><input type="checkbox" checked={confirmed} disabled={busy} onChange={event=>setConfirmed(event.target.checked)}/> I reviewed the full discovery. It contains no nudity, pornography, sexual exploitation or prohibited content.</label>
+   <p>Review the cover, description, linked page and any video or music before publishing. Reject AI-generated discovery content; unsafe-image screening does not check authenticity. Your confirmed review overrides automated image screening and is recorded.</p>
+   <label><input type="checkbox" checked={confirmed} disabled={busy} onChange={event=>setConfirmed(event.target.checked)}/> I reviewed the full discovery. Its submitted content is not AI-generated and it contains no nudity, pornography, sexual exploitation or prohibited content.</label>
    <button disabled={busy||!confirmed} onClick={()=>moderate('approved')}>{busy?'Approving…':'Confirm approval'}</button>
    <button disabled={busy} onClick={()=>setReview(false)}>Cancel</button>
   </div>}

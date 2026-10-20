@@ -415,3 +415,4 @@ body .discovery-tags button,.viewer-tags button{background:#dfe5ec;color:#303b48
 /* Unread notifications use a plain round mobile-style dot. */
 .profile-trigger .notification-dot{border-radius:50%!important;border:0!important;box-shadow:none!important;outline:0}
 .profile-trigger,.profile-trigger .member-avatar{border-radius:50%!important}
+.authentic-content-confirmation{display:flex;align-items:flex-start;gap:10px;line-height:1.6;margin:18px 0}.authentic-content-confirmation input{width:18px;height:18px;flex-shrink:0;margin:3px 0 0}

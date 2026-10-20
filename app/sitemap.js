@@ -1,9 +1,10 @@
+import {learnPaths} from '../lib/learn-pages.mjs';
 import {publicClient} from '../lib/public-discovery.mjs';
 
 export const revalidate=3600;
 export default async function sitemap(){
  const base='https://fuckinawesome.com';
- const pages=['','/about','/community','/privacy'].map(path=>({url:base+path}));
+ const pages=['','/community','/privacy','/guides',...learnPaths].map(path=>({url:base+path}));
  const db=publicClient();
  if(!db)throw new Error('Public discovery connection is unavailable');
  // Use the public approved-only view, never moderation or private account data.

@@ -1,0 +1,29 @@
+import {Suspense} from 'react';
+import BrandLogo from './brand-logo';
+import VoteMeters from './vote-meters';
+import InternetInterest from './internet-interest';
+import {publicClient} from '../lib/public-discovery.mjs';
+import {learnPages} from '../lib/learn-pages.mjs';
+import './learn.css';
+
+export function learnMetadata(key){const p=learnPages[key],title=p.title+' — Fuckin Awesome';return {title,description:p.description,alternates:{canonical:'https://fuckinawesome.com'+p.path},openGraph:{title,description:p.description,url:'https://fuckinawesome.com'+p.path,type:'website'}};}
+export function LearnHeader(){return <header className="learn-header"><div className="wrap nav"><BrandLogo/><nav aria-label="Learn about FuckinAwesome"><a href="/about">Why we exist</a><a href="/how-it-works">How it works</a><a href="/guides">Guides</a><a href="/">Explore discoveries ↗</a></nav></div></header>;}
+export function LearnFooter(){return <footer className="learn-footer"><p>Real people, real discoveries.</p><nav className="footerlinks" aria-label="About the community"><a href="/about">About</a><a href="/how-it-works">How it works</a><a href="/guides">Guides</a><a href="/for-creators">For creators</a><a href="/ai-policy">AI policy</a><a href="/community">Community guidelines</a><a href="/privacy">Privacy</a><a href="mailto:support@fuckinawesome.com">Contact support</a></nav><small>Operated by Black Dog LLC.</small></footer>;}
+export function AIPolicyNote(){return <aside className="learn-policy"><span className="learn-kicker">Our content standard</span><h2>Real discoveries. No AI-generated submissions.</h2><p>AI-generated discovery content is not accepted and is rejected when identified. AI only helps search for interest and demand signals, surface potential discoveries, and moderate unsafe content.</p><a href="/ai-policy">Read our AI policy →</a></aside>;}
+
+async function DiscoveryVisual({kind}){
+ let items=[];
+ try{const db=publicClient();if(db){const result=await db.from('discoveries').select('id,title,category,up_votes,down_votes,neutral_votes,image_path').eq('status','approved').not('image_path','is',null).order('created_at',{ascending:false}).limit(6).abortSignal(AbortSignal.timeout(5000));if(!result.error)items=result.data||[];}}catch{}
+ if(!items.length)return null;
+ const item=items.find(x=>Number(x.up_votes)+Number(x.down_votes)+Number(x.neutral_votes||0)>0)||items[0];
+ return <figure className={'learn-visual learn-visual-'+kind}>
+ {kind==='grid'?<div className="learn-discovery-grid">{items.map(x=><div className="learn-discovery-tile" key={x.id}><img src={'/discovery/'+x.id+'/cover?w=640'} width="480" height="320" alt={x.title} loading="lazy"/><span>{x.category}</span><strong>{x.title}</strong></div>)}</div>:<div className="learn-discovery-example"><img src={'/discovery/'+item.id+'/cover?w=960'} width="800" height="600" alt={item.title} loading="lazy"/><div className="learn-example-detail"><span className="learn-kicker">From the discovery feed</span><h2>{item.title}</h2>{kind==='meters'?<><InternetInterest id={item.id}/><VoteMeters up={Number(item.up_votes)||0} down={Number(item.down_votes)||0} neutral={Number(item.neutral_votes)||0}/></>:<><p>Inspect the source. Make your own call.</p><span className="learn-swipe-label">SWIPE TO VOTE</span><p className="learn-example-verdict">← Bullshit <span>Awesome →</span></p></>}</div></div>}
+ <figcaption>{kind==='grid'?'A selection from the approved discovery feed. Explore across interests and decide what deserves your attention.':kind==='meters'?'A real discovery, using the same meter components as the feed. Vote totals are a cached snapshot; Internet interest checks separately. These signals answer different questions.':'A real discovery shown as a read-only example. Open discoveries in the feed to inspect their sources and vote.'} Source images are shown through the same cover service as the feed; this illustration does not cast votes.</figcaption>
+ </figure>;
+}
+
+export default function LearnPage({pageKey}){
+ const page=learnPages[pageKey];
+ const structured={'@context':'https://schema.org','@type':'WebPage',name:page.title,description:page.description,url:'https://fuckinawesome.com'+page.path,isPartOf:{'@type':'WebSite',name:'Fuckin Awesome',url:'https://fuckinawesome.com'},publisher:{'@type':'Organization',name:'Black Dog LLC'}};
+ return <div className="learn-site"><LearnHeader/><main id="main-content" className="learn-main"><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(structured).replace(/</g,'\\u003c')}}/><nav className="learn-breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span>{page.path.startsWith('/guides/')&&<><a href="/guides">Guides</a><span>/</span></>}<span aria-current="page">{page.title}</span></nav><article><div className="learn-intro"><p className="learn-kicker">{page.eyebrow}</p><h1>{page.heading}</h1><p className="learn-deck">{page.intro}</p></div>{page.visual&&<Suspense fallback={null}><DiscoveryVisual kind={page.visual}/></Suspense>}<div className="learn-prose">{page.sections.map(([heading,text],i)=><section key={heading} id={'section-'+(i+1)}><h2>{heading}</h2><p>{text}</p>{pageKey==='popular-vs-awesome'&&i===2&&<p className="learn-source">Methodology sources: <a href="https://www.gdeltproject.org/">GDELT</a> and <a href="https://doc.wikimedia.org/generated-data-platform/aqs/analytics-api/">Wikimedia Analytics API</a>. These are attention signals, not verified buyers or unique people.</p>}</section>)}<AIPolicyNote/><section className="learn-related"><h2>Keep exploring</h2><ul>{page.related.map(key=><li key={key}><a href={learnPages[key].path}>{learnPages[key].title} →</a></li>)}</ul></section><a className="learn-cta" href="/">Explore discoveries →</a></div></article></main><LearnFooter/></div>;
+}
