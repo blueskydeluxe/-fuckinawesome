@@ -4,7 +4,7 @@ import {trackUsage} from '../lib/usage';
 import {discoveryPhotoUrl} from '../lib/discovery-photo-url';
 import {cardImageUrl,videoSource} from '../lib/card-image.mjs';
 export default function DiscoveryPhoto({path,title,onOpen,discoveryId,sourceUrl,priority=false}){
- const imageRef=useRef(null),[nearby,setNearby]=useState(priority),[frameWidth,setFrameWidth]=useState(380),[url,setUrl]=useState(null),[error,setError]=useState(false),[fallback,setFallback]=useState(false),[attempt,setAttempt]=useState(0),[expanded,setExpanded]=useState(false);
+ const imageRef=useRef(null),[nearby,setNearby]=useState(priority),[frameWidth,setFrameWidth]=useState(380),[url,setUrl]=useState(priority&&discoveryId?cardImageUrl(discoveryId):null),[error,setError]=useState(false),[fallback,setFallback]=useState(false),[attempt,setAttempt]=useState(0),[expanded,setExpanded]=useState(false);
  const lightbox=useRef(null);
  useEffect(()=>{const size=new ResizeObserver(entries=>{const width=entries[0]?.contentRect.width;if(width)setFrameWidth(Math.ceil(width))});if(imageRef.current)size.observe(imageRef.current);return()=>size.disconnect()},[]);
  useEffect(()=>{const observer=new IntersectionObserver(entries=>{if(entries.some(x=>x.isIntersecting)){setNearby(true);observer.disconnect()}},{rootMargin:'700px'});if(imageRef.current)observer.observe(imageRef.current);return()=>observer.disconnect()},[]);
