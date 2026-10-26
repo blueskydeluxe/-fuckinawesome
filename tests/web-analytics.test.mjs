@@ -18,6 +18,16 @@ test('counts one initial page view and only allowlisted events; respects browser
  const w={navigator:{}};const a=createWebAnalytics(w);a.setConsent('granted');a.start('https://fuckinawesome.com/');a.start('https://fuckinawesome.com/');a.page('https://fuckinawesome.com/?q=anything');a.event('vote');a.event('image');a.event('private text');
  assert.equal(w.dataLayer.filter(x=>x[0]==='event'&&x[1]==='page_view').length,1);assert.equal(w.dataLayer.filter(x=>x[0]==='event'&&x[1]==='vote_cast').length,1);assert.equal(w.dataLayer.filter(x=>x[0]==='event').length,2);
 });
+
+test('preview funnel events remain anonymous counts behind existing analytics consent',()=>{
+ const w={navigator:{}},a=createWebAnalytics(w);
+ a.event('first_swipe');assert.equal(w.dataLayer,undefined);
+ a.setConsent('granted');a.start('https://fuckinawesome.com/');
+ for(const name of ['first_swipe','five_previews','preview_signup','preview_signin','preview_votes_counted'])a.event(name);
+ const events=w.dataLayer.filter(x=>x[0]==='event'&&x[1]!=='page_view');
+ assert.equal(events.length,5);assert.ok(events.every(e=>e.length===2));
+ a.setConsent('denied');a.event('first_swipe');assert.equal(w.dataLayer.filter(x=>x[0]==='event'&&x[1]==='first_swipe').length,1);
+});
 test('active social campaigns retain attribution while private query values stay excluded',()=>{
  for(const campaign of ['five_votes_20261020','your_call_20261022','your_find_20261024']){
   const data=safePage('https://fuckinawesome.com/?utm_source=facebook&utm_medium=organic_social&utm_campaign='+campaign+'&email=private@example.org');
