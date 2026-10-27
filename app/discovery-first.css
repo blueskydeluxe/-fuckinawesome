@@ -67,3 +67,58 @@
  .story-actions .primary{width:100%;white-space:normal}
 }
 @media(prefers-reduced-motion:reduce){.opening-swipe-hint{animation:none}}
+
+/* A compact, centered introduction; exhausted decks do not reserve a card slot. */
+.opening-hero{padding:24px 16px 20px}
+.opening-experience{grid-template-columns:minmax(0,1fr);justify-items:center;gap:22px}
+.opening-intro{position:relative;isolation:isolate;width:100%;text-align:center;padding:36px 24px 30px;overflow:hidden;border:1px solid #f1d6bd;border-radius:24px;background:radial-gradient(ellipse at 12% 5%,#ffc98988,transparent 55%),radial-gradient(ellipse at 95% 95%,#ffac8755,transparent 52%),#fff8ed}
+.opening-intro:after{content:"";position:absolute;z-index:-1;width:210px;height:210px;border:1px solid #e9b38266;border-radius:50%;right:-100px;top:-115px;box-shadow:0 0 0 28px #efc19922,0 0 0 56px #efc19918;pointer-events:none}
+.opening-intro .eyebrow{display:inline-block;padding:7px 12px;border:1px solid #dcac8155;border-radius:999px;background:#ffffff99;color:#8f421c;font-size:10px;letter-spacing:2px}
+.opening-intro h1{max-width:850px;margin:20px auto 18px;font-size:clamp(38px,5vw,66px);line-height:1.05;letter-spacing:-1px;text-wrap:balance}
+.opening-headline-accent{color:#c74b13;font-style:italic;text-decoration:underline;text-decoration-color:#ffad5a;text-decoration-thickness:4px;text-underline-offset:7px}
+.opening-intro>p{max-width:540px;margin:0 auto;font-size:17px;line-height:1.6;color:#595047;text-wrap:balance}
+.opening-stage{width:100%;max-width:560px}
+.opening-without-card{gap:0}
+@media(max-width:700px){
+ .opening-hero{padding:14px 12px 16px}
+ .opening-experience{gap:18px}
+ .opening-intro{padding:25px 16px 24px;border-radius:20px}
+ .opening-intro .eyebrow{font-size:8px;letter-spacing:1.4px;padding:6px 9px}
+ .opening-intro h1{font-size:clamp(30px,8.8vw,44px);line-height:1.08;margin:18px auto 15px;letter-spacing:-.6px}
+ .opening-headline-break{display:none}
+ .opening-intro>p{font-size:13px;line-height:1.6;margin:0 auto}
+ .opening-headline-accent{text-decoration-thickness:3px;text-underline-offset:5px}
+ .opening-without-card{gap:0}
+}
+
+/* Treat the first swipe as a tangible card with unmistakable verdict controls. */
+.opening-intro{border-radius:24px!important}
+.opening-intro:after{border-radius:50%!important}
+.opening-intro .eyebrow{border-radius:999px!important}
+.opening-card{border:2px solid #d0c6b8;border-radius:22px!important;background:#fff;box-shadow:0 8px 0 #e9e4db,0 18px 38px #332a2429}
+.opening-media{position:relative;background:#edece7}
+.opening-photo{height:390px}
+.opening-swipe-hint{top:14px;border-radius:999px!important;background:#fffdf4;color:#342d26;box-shadow:0 3px 14px #0003;letter-spacing:.3px;padding:9px 15px}
+.opening-votes{position:absolute;left:14px;right:14px;bottom:14px;grid-template-columns:1fr .48fr 1fr;gap:8px;align-items:end}
+.opening-votes button{background:#fffdf8;color:#20251d;box-shadow:0 4px 14px #0003;border:1px solid #c8c1b5;border-bottom-width:6px;border-radius:12px!important;font-weight:900;font-size:15px;min-height:58px;padding:12px 5px;transition:transform 140ms,background 140ms}
+.opening-votes .opening-bullshit{border-bottom-color:#d73d32}
+.opening-votes .opening-awesome{border-bottom-color:#77833e}
+.opening-votes .opening-meh{font-size:11px;min-height:46px;border-bottom-width:3px;border-bottom-color:#b5b2a9;color:#625e55}
+.opening-votes .opening-bullshit:hover{background:#fff0eb;transform:translateY(-3px)}
+.opening-votes .opening-awesome:hover{background:#f1f4e4;transform:translateY(-3px)}
+.opening-votes button:active{transform:translateY(2px)}
+.opening-copy{padding:20px 22px 18px;background:#fff}
+.opening-copy>p{margin-bottom:0}
+.preview-label{margin:0 0 12px;font-size:10px;letter-spacing:1.2px}
+@media(max-width:700px){
+ .opening-stage{padding:0 3px 8px}
+ .opening-card{border-radius:19px!important;box-shadow:0 6px 0 #e9e4db,0 14px 28px #332a2426}
+ .opening-photo{height:clamp(300px,88vw,390px)}
+ .opening-votes{left:10px;right:10px;bottom:12px;gap:6px}
+ .opening-votes button{min-height:56px;font-size:14px;border-radius:10px!important}
+ .opening-votes .opening-meh{min-height:44px;font-size:10px}
+ .opening-copy{padding:17px 16px 18px}
+ .opening-copy h2{font-size:22px;margin:7px 0 9px}
+ .opening-copy>p{font-size:13px;line-height:1.5;margin-bottom:0}
+}
+@media(prefers-reduced-motion:reduce){.opening-votes button{transition:none}.opening-votes button:hover{transform:none}}
