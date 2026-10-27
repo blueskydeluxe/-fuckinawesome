@@ -22,8 +22,6 @@
 .opening-copy h2 a{color:inherit;text-decoration:none}
 .opening-copy h2 a:hover{text-decoration:underline;text-underline-offset:3px}
 .opening-copy>p{font-size:13px;line-height:1.5;color:#4e5966;margin:0 0 18px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
-.opening-votes{display:grid;grid-template-columns:1fr .65fr 1fr;gap:8px}
-.opening-votes button{min-width:0;min-height:46px;padding:10px 6px;font-size:13px}
 .opening-reveal{font-size:13px;line-height:1.5;min-height:20px;margin:12px 0 0;text-align:center;color:#344352}
 .text-action{display:block;margin:12px auto 0;padding:6px 0;border:0;background:transparent;color:inherit;font-size:12px;text-decoration:underline;text-underline-offset:4px;white-space:normal}
 .preview-recap,.opening-empty{padding:32px 26px;border:1px solid #cbd1d7;border-radius:18px;background:#fff;box-shadow:0 15px 45px #2836411a;text-align:center}
@@ -56,8 +54,7 @@
  .opening-copy{padding:14px}
  .opening-copy h2{font-size:20px}
  .opening-copy>p{-webkit-line-clamp:2;font-size:12px;margin-bottom:12px}
- .opening-votes button{font-size:12px;min-height:44px}
- .opening-swipe-hint{font-size:11px;padding:7px 12px}
+.opening-swipe-hint{font-size:11px;padding:7px 12px}
  .preview-label{font-size:9px}
  .opening-reveal{font-size:12px;margin:8px 0}
  .preview-recap{padding:24px 18px}
@@ -99,14 +96,6 @@
 .opening-media{position:relative;background:#edece7}
 .opening-photo{height:390px}
 .opening-swipe-hint{top:14px;border-radius:999px!important;background:#fffdf4;color:#342d26;box-shadow:0 3px 14px #0003;letter-spacing:.3px;padding:9px 15px}
-.opening-votes{position:absolute;left:14px;right:14px;bottom:14px;grid-template-columns:1fr .48fr 1fr;gap:8px;align-items:end}
-.opening-votes button{background:#fffdf8;color:#20251d;box-shadow:0 4px 14px #0003;border:1px solid #c8c1b5;border-bottom-width:6px;border-radius:12px!important;font-weight:900;font-size:15px;min-height:58px;padding:12px 5px;transition:transform 140ms,background 140ms}
-.opening-votes .opening-bullshit{border-bottom-color:#d73d32}
-.opening-votes .opening-awesome{border-bottom-color:#77833e}
-.opening-votes .opening-meh{font-size:11px;min-height:46px;border-bottom-width:3px;border-bottom-color:#b5b2a9;color:#625e55}
-.opening-votes .opening-bullshit:hover{background:#fff0eb;transform:translateY(-3px)}
-.opening-votes .opening-awesome:hover{background:#f1f4e4;transform:translateY(-3px)}
-.opening-votes button:active{transform:translateY(2px)}
 .opening-copy{padding:20px 22px 18px;background:#fff}
 .opening-copy>p{margin-bottom:0}
 .preview-label{margin:0 0 12px;font-size:10px;letter-spacing:1.2px}
@@ -114,11 +103,35 @@
  .opening-stage{padding:0 3px 8px}
  .opening-card{border-radius:19px!important;box-shadow:0 6px 0 #e9e4db,0 14px 28px #332a2426}
  .opening-photo{height:clamp(300px,88vw,390px)}
- .opening-votes{left:10px;right:10px;bottom:12px;gap:6px}
- .opening-votes button{min-height:56px;font-size:14px;border-radius:10px!important}
- .opening-votes .opening-meh{min-height:44px;font-size:10px}
- .opening-copy{padding:17px 16px 18px}
+.opening-votes button{min-height:56px;font-size:14px;border-radius:10px!important}
+.opening-copy{padding:17px 16px 18px}
  .opening-copy h2{font-size:22px;margin:7px 0 9px}
  .opening-copy>p{font-size:13px;line-height:1.5;margin-bottom:0}
 }
 @media(prefers-reduced-motion:reduce){.opening-votes button{transition:none}.opening-votes button:hover{transform:none}}
+
+/* The opening card and the main viewer share one connected verdict strip. */
+.voting,.opening-votes,.discovery-dialog .viewer-engagement .voting{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0}
+.opening-media .opening-votes{position:absolute;left:0;right:0;bottom:0;width:100%;margin:0}
+.voting button,.opening-votes button,.discovery-dialog .viewer-engagement .voting button{height:82px;min-height:82px;margin:0;padding:9px 3px;border:0;border-radius:0!important;box-shadow:none;transform:none;color:#fff;text-align:center;display:flex;align-items:center;justify-content:center;min-width:0}
+.voting button:first-child,.opening-votes button:first-child,.discovery-dialog .viewer-engagement .voting button:first-child{grid-column:3;grid-row:1;background:#e3342c;color:#fff}
+.voting .meh-vote,.opening-votes .meh-vote,.discovery-dialog .viewer-engagement .voting .meh-vote{grid-column:2;grid-row:1;background:#dce2e9;color:#273342}
+.voting button:last-child,.opening-votes button:last-child,.discovery-dialog .viewer-engagement .voting button:last-child{grid-column:1;grid-row:1;background:#657139;color:#fff}
+.voting .vote-desktop-label{display:none}
+.voting .vote-mobile-label,.discovery-dialog .viewer-engagement .voting .vote-mobile-label{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:13px;line-height:1.2;font-weight:800}
+.voting .vote-symbol,.discovery-dialog .viewer-engagement .voting .vote-symbol{display:grid;place-items:center;width:48px;height:40px;font-size:0;line-height:1}
+.voting .vote-symbol:before{content:"";display:block;width:44px;height:33px;background:currentColor;clip-path:polygon(0 35%,59% 35%,59% 5%,100% 50%,59% 95%,59% 65%,0 65%);filter:drop-shadow(0 1px 0 #0002)}
+.voting button:last-child .vote-symbol:before{transform:rotate(180deg)}
+.voting .meh-vote .vote-symbol,.discovery-dialog .viewer-engagement .voting .meh-vote .vote-symbol{font-size:38px;font-weight:500}
+.voting .meh-vote .vote-symbol:before{display:none}
+.voting button:hover:not(:disabled){filter:brightness(1.1);transform:none}
+.voting button:active:not(:disabled){box-shadow:inset 0 0 0 3px #ffffffb0;transform:none}
+.voting button:focus-visible{outline-offset:-4px;outline-color:#fff}
+/* The attention rating is charcoal at every stage, including Rising star. */
+.internet-interest,.discovery-dialog .internet-interest{background:#292d32;color:#fff;border:1px solid #42484f;padding:12px 14px;margin:10px 16px}
+.internet-interest .interest-rating-heading strong,.internet-interest .interest-eyebrow,.internet-interest .interest-explanation,.internet-interest .interest-explanation p,.internet-interest .interest-explanation li{color:#f5f6f7!important}
+.internet-interest .interest-rating-heading svg text{fill:#fff}
+.internet-interest .interest-help{background:#383e45;color:#fff;border-color:#747e88}
+.internet-interest .interest-help:hover{background:#4b535d;color:#fff}
+.internet-interest .interest-explanation a{color:#ffd0a8}
+.discovery-dialog .close,.discovery-dialog .viewer-close-control .close,.dialog .close,.photo-lightbox .close,.vote-moment .moment-dismiss{border-radius:50%!important;width:48px;height:48px;min-width:48px;min-height:48px;display:grid;place-items:center;padding:0;font-size:28px;line-height:1;background:#edf0f4;color:#273342;border:1px solid #bbc4cf}
