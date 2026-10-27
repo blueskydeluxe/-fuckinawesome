@@ -10,5 +10,5 @@ test('discovery page text, image and source exist as real HTML without running e
 });
 test('first card is server rendered with a canonical discovery link and honest guest label',()=>{
  const html=renderToStaticMarkup(React.createElement(component('opening-deck.js'),{rows:[item]}));
- assert.match(html,/Swipe right on the internet/);assert.match(html,/Votes don’t count yet/);assert.match(html,/\/discovery\/12345678-abcd-1234-abcd-123456789abc\/cover/);assert.match(html,/A physical signal/);assert.doesNotMatch(html,/73%|4 out of 5/);
+ assert.match(html.replace(/<[^>]*>/g,''),/Swipe right on the internet/);assert.match(html,/Votes don’t count yet/);assert.match(html,/\/discovery\/12345678-abcd-1234-abcd-123456789abc\/cover/);assert.match(html,/A physical signal/);assert.doesNotMatch(html,/73%|4 out of 5/);
 });
