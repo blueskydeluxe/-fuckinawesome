@@ -17,7 +17,7 @@ function deck({member=null,storage=new Map(),reject=false,gate=null}={}){
 }
 test('five guest previews make no vote writes and present an honest signup prompt',async()=>{
  const h=deck();await h.flush();
- for(let n=0;n<5;n++){await h.button('Awesome →').props.onClick();await h.flush()}
+ for(let n=0;n<5;n++){await h.button('→Awesome').props.onClick();await h.flush()}
  assert.equal(h.calls,0);assert.ok(h.button('Lock in my votes'));assert.ok(h.button('Keep swiping (votes won’t count)'));
  const html=renderToStaticMarkup(h.all()[0]);assert.match(html,/5 finds/);assert.doesNotMatch(html,/4 out of 5|4\/5|Vote counted/);
  await h.button('Lock in my votes').props.onClick();await h.flush();assert.equal(h.logins,1);assert.equal(h.calls,0);
